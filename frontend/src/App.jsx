@@ -1,0 +1,111 @@
+import { Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import { ProtectedRoute } from "./components/ProtectedRoute";
+
+// Public pages
+import Login from "./pages/auth/Login";
+import Signup from "./pages/auth/Signup";
+import UserDashboard from "./pages/user/UserDashboard";
+import RecipeSearch from "./pages/user/RecipeSearch";
+import RecipeDetail from "./pages/user/RecipeDetail";
+
+// Chef pages
+import ChefDashboard from "./pages/chef/ChefDashboard";
+import AddRecipePage from "./pages/chef/AddRecipePage";
+import ChefProfile from "./pages/chef/ChefProfile";
+
+// Admin pages
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminRecipes from "./pages/admin/AdminRecipes";
+import AdminChefs from "./pages/admin/AdminChefs";
+import AdminProfile from "./pages/admin/AdminProfile";
+
+function App() {
+  return (
+    <AuthProvider>
+      <Routes>
+        {/* PUBLIC ROUTES */}
+        <Route path="/" element={<UserDashboard />} />
+        <Route path="/recipe/:id" element={<RecipeDetail />} />
+        <Route path="/search" element={<RecipeSearch />} />
+
+        {/* AUTH ROUTES */}
+        <Route path="/auth/login" element={<Login />} />
+        <Route path="/auth/signup" element={<Signup />} />
+
+        {/* CHEF ROUTES */}
+        <Route
+          path="/chef/dashboard"
+          element={
+            <ProtectedRoute requiredRole="chef">
+              <ChefDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/chef/recipes/new"
+          element={
+            <ProtectedRoute requiredRole="chef">
+              <AddRecipePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/chef/recipes/:id/edit"
+          element={
+            <ProtectedRoute requiredRole="chef">
+              <AddRecipePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute requiredRole="chef">
+              <ChefProfile />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ADMIN ROUTES */}
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/recipes"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminRecipes />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/chefs"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminChefs />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/profile"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminProfile />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* 404 FALLBACK */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </AuthProvider>
+  );
+}
+
+export default App;
