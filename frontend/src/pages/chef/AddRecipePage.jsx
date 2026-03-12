@@ -40,6 +40,15 @@ export default function AddRecipePage() {
   const [error, setError] = useState("");
   const [initialLoading, setInitialLoading] = useState(isEditing);
 
+  // Cleanup preview URL on unmount
+  useEffect(() => {
+    return () => {
+      if (imagePreview && imagePreview.startsWith('blob:')) {
+        URL.revokeObjectURL(imagePreview);
+      }
+    };
+  }, [imagePreview]);
+
   // Load existing recipe if editing
   useEffect(() => {
     if (isEditing) {
@@ -87,8 +96,23 @@ export default function AddRecipePage() {
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
+      // Validate file type
+      const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+      if (!validTypes.includes(file.type)) {
+        setError('Please upload a valid image file (JPEG, PNG, GIF, or WebP)');
+        return;
+      }
+      
+      // Validate file size (5MB max)
+      if (file.size > 5 * 1024 * 1024) {
+        setError('Image size must be less than 5MB');
+        return;
+      }
+      
       setImageFile(file);
-      setImagePreview(URL.createObjectURL(file));
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreview(previewUrl);
+      setError(''); // Clear any previous errors
     }
   };
 
@@ -202,9 +226,9 @@ export default function AddRecipePage() {
           )}
 
           <Grid container spacing={3}>
-            {/* LEFT COLUMN */}
+            {/* ROW 1 - COLUMN 1: RECIPE DETAILS */}
             <Grid item xs={12} md={8}>
-              <Paper sx={{ p: 3, mb: 3, borderRadius: 3 }}>
+              <Paper sx={{ p: 3, borderRadius: 3 }}>
                 <Typography fontWeight={600} mb={2}>
                   RECIPE DETAILS
                 </Typography>
@@ -262,8 +286,107 @@ export default function AddRecipePage() {
                   disabled={loading}
                 />
               </Paper>
+            </Grid>
 
-              {/* ADDITIONAL DETAILS */}
+            {/* ROW 1 - COLUMN 2: RECIPE IMAGE */}
+            <Grid item xs={12} md={4}>
+              <Paper sx={{ p: 3, borderRadius: 3 }}>
+                <Typography fontWeight={600} mb={2}>
+                  RECIPE IMAGE
+                </Typography>
+
+                <Box
+                  sx={{
+                    height: 200,
+                    background: imagePreview ? "transparent" : "#1e3b2f",
+                    borderRadius: 3,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    mb: 2,
+                    overflow: "hidden",
+                    border: imagePreview ? "2px solid #e0e0e0" : "2px dashed #4a4a4a",
+                  }}
+                >
+                  {imagePreview ? (
+                    <img
+                      src={imagePreview}
+                      alt="Recipe preview"
+                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    />
+                  ) : (
+                    <Box sx={{ textAlign: "center" }}>
+                      <Typography color="#fff" sx={{ mb: 1 }}>📷</Typography>
+                      <Typography color="#fff" variant="body2">No image selected</Typography>
+                    </Box>
+                  )}
+                </Box>
+
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  component="label"
+                  disabled={loading}
+                >
+                  {imagePreview ? 'Change Image' : 'Upload Image'}
+                  <input 
+                    type="file" 
+                    hidden 
+                    onChange={handleImageUpload} 
+                    accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                    key={imagePreview} // Force re-render when image changes
+                  />
+                </Button>
+
+                {/* READY CHECKLIST */}
+                <Box
+                  sx={{
+                    mt: 3,
+                    p: 2,
+                    background: "#e8f5e9",
+                    borderRadius: 2,
+                  }}
+                >
+                  <Typography fontWeight={600} mb={1}>
+                    {isEditing ? "Ready to Update" : "Ready to Publish"}
+                  </Typography>
+
+                  <Typography variant="body2">
+                    {title ? "✓ Title filled" : "• Title missing"}
+                  </Typography>
+
+                  <Typography variant="body2">
+                    {ingredients.length >= 1
+                      ? "✓ Ingredients added"
+                      : "• Add ingredients"}
+                  </Typography>
+
+                  <Typography variant="body2">
+                    {instructions ? "✓ Instructions filled" : "• Instructions missing"}
+                  </Typography>
+
+                  {!isEditing && (
+                    <Typography variant="body2">
+                      {imageFile ? "✓ Image uploaded" : "• Upload image"}
+                    </Typography>
+                  )}
+                </Box>
+
+                <Button
+                  fullWidth
+                  variant="contained"
+                  color="success"
+                  sx={{ mt: 3 }}
+                  onClick={handlePublish}
+                  disabled={!readyToPublish || loading}
+                >
+                  {loading ? <CircularProgress size={24} color="inherit" /> : (isEditing ? "Update Recipe" : "Publish Recipe")}
+                </Button>
+              </Paper>
+            </Grid>
+
+            {/* ROW 2 - COLUMN 1: ADDITIONAL DETAILS */}
+            <Grid item xs={12} md={8}>
               <Paper sx={{ p: 3, borderRadius: 3 }}>
                 <Typography fontWeight={600} mb={2}>
                   ADDITIONAL DETAILS (OPTIONAL)
@@ -311,93 +434,6 @@ export default function AddRecipePage() {
                   onChange={(e) => setServings(e.target.value)}
                   disabled={loading}
                 />
-              </Paper>
-            </Grid>
-
-            {/* RIGHT COLUMN */}
-            <Grid item xs={12} md={4}>
-              <Paper sx={{ p: 3, borderRadius: 3 }}>
-                <Typography fontWeight={600} mb={2}>
-                  RECIPE IMAGE
-                </Typography>
-
-                <Box
-                  sx={{
-                    height: 200,
-                    background: "#1e3b2f",
-                    borderRadius: 3,
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    mb: 2,
-                    overflow: "hidden",
-                  }}
-                >
-                  {imagePreview ? (
-                    <img
-                      src={imagePreview}
-                      alt="preview"
-                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                    />
-                  ) : (
-                    <Typography color="#fff">Upload Image</Typography>
-                  )}
-                </Box>
-
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  component="label"
-                  disabled={loading}
-                >
-                  Change Image
-                  <input type="file" hidden onChange={handleImageUpload} accept="image/*" />
-                </Button>
-
-                {/* READY CHECKLIST */}
-                <Box
-                  sx={{
-                    mt: 3,
-                    p: 2,
-                    background: "#e8f5e9",
-                    borderRadius: 2,
-                  }}
-                >
-                  <Typography fontWeight={600} mb={1}>
-                    {isEditing ? "Ready to Update" : "Ready to Publish"}
-                  </Typography>
-
-                  <Typography variant="body2">
-                    {title ? "✓ Title filled" : "• Title missing"}
-                  </Typography>
-
-                  <Typography variant="body2">
-                    {ingredients.length >= 1
-                      ? "✓ Ingredients added"
-                      : "• Add ingredients"}
-                  </Typography>
-
-                  <Typography variant="body2">
-                    {instructions ? "✓ Instructions filled" : "• Instructions missing"}
-                  </Typography>
-
-                  {!isEditing && (
-                    <Typography variant="body2">
-                      {imageFile ? "✓ Image uploaded" : "• Upload image"}
-                    </Typography>
-                  )}
-                </Box>
-
-                <Button
-                  fullWidth
-                  variant="contained"
-                  color="success"
-                  sx={{ mt: 3 }}
-                  onClick={handlePublish}
-                  disabled={!readyToPublish || loading}
-                >
-                  {loading ? <CircularProgress size={24} color="inherit" /> : (isEditing ? "Update Recipe" : "Publish Recipe")}
-                </Button>
               </Paper>
             </Grid>
           </Grid>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
+import WordCloud3D from"../../components/WordCloud3D";
 import {
   Box,
   Typography,
@@ -60,12 +61,18 @@ export default function RecipeDetail() {
       </Box>
     );
   }
+  
 
   return (
+    
     <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: "#f5f5f5" }}>
-      <Header />
+      <WordCloud3D/>
+  <Box sx={{ position: 'relative', zIndex: 1 }}>
+    <Header />
+      
 
-      <Box sx={{ flex: 1, display: "flex", justifyContent: "center", p: 3 }}>
+      <Box sx={{ flex: 1, display: "flex", justifyContent: "center", p: 3 ,position: 'relative' , zIndex:1}}>
+        
         <Box
           sx={{
             width: "100%",
@@ -90,6 +97,12 @@ export default function RecipeDetail() {
 
           <Typography sx={{ color: "#666", fontSize: 14, mb: 2 }}>
             By <strong>{recipe.chefName}</strong>
+            {recipe.chefId?.bio && (
+              <>
+                {" • "}
+                <span style={{ fontStyle: "italic" }}>{recipe.chefId.bio}</span>
+              </>
+            )}
             {recipe.category && ` • ${recipe.category}`}
           </Typography>
 
@@ -116,6 +129,7 @@ export default function RecipeDetail() {
               </Box>
             )}
           </Box>
+          
 
           {/* IMAGE */}
           {recipe.image && (
@@ -197,11 +211,13 @@ export default function RecipeDetail() {
                 </Typography>
               )}
             </Card>
+            
           </Box>
         </Box>
       </Box>
 
       <Footer />
+    </Box>
     </Box>
   );
 }
