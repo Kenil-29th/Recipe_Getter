@@ -16,8 +16,7 @@ import {
   Alert,
   CircularProgress,
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
+import { Trash2, Edit, Plus, CheckCircle, Clock, AlertCircle, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../../components/Sidebar";
 import ChefHeader from "../../components/ChefHeader";
@@ -85,10 +84,11 @@ export default function ChefDashboard() {
             </Typography>
             <Button
               variant="contained"
+              startIcon={<Plus size={18} />}
               onClick={() => navigate("/chef/recipes/new")}
-              sx={{ background: "#3a5f23" }}
+              sx={{ background: "#3a5f23", "&:hover": { background: "#2d4620" } }}
             >
-              + Add New Recipe
+              Add New Recipe
             </Button>
           </Box>
 
@@ -104,6 +104,7 @@ export default function ChefDashboard() {
             </Box>
           ) : recipes.length === 0 ? (
             <Paper sx={{ p: 4, textAlign: "center" }}>
+              <AlertCircle size={48} color="#999" style={{ marginBottom: 16 }} />
               <Typography color="text.secondary">
                 No recipes yet. Create your first recipe!
               </Typography>
@@ -132,29 +133,41 @@ export default function ChefDashboard() {
                       <TableCell align="center">{recipe.servings || "-"}</TableCell>
                       <TableCell align="center">
                         {recipe.isPublished ? (
-                          <Typography sx={{ color: "green", fontSize: 12 }}>
-                            Published
-                          </Typography>
+                          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 0.5 }}>
+                            <CheckCircle size={14} color="green" />
+                            <Typography sx={{ color: "green", fontSize: 12 }}>
+                              Published
+                            </Typography>
+                          </Box>
                         ) : (
-                          <Typography sx={{ color: "orange", fontSize: 12 }}>
-                            Draft
-                          </Typography>
+                          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 0.5 }}>
+                            <Clock size={14} color="orange" />
+                            <Typography sx={{ color: "orange", fontSize: 12 }}>
+                              Draft
+                            </Typography>
+                          </Box>
                         )}
                       </TableCell>
                       <TableCell align="center">
                         <IconButton
                           size="small"
                           onClick={() => handleEdit(recipe._id)}
-                          color="primary"
+                          sx={{ 
+                            color: "#2563eb",
+                            "&:hover": { backgroundColor: "#dbeafe" }
+                          }}
                         >
-                          <EditIcon fontSize="small" />
+                          <Edit size={18} />
                         </IconButton>
                         <IconButton
                           size="small"
                           onClick={() => handleDeleteClick(recipe._id)}
-                          color="error"
+                          sx={{ 
+                            color: "#dc2626",
+                            "&:hover": { backgroundColor: "#fee2e2" }
+                          }}
                         >
-                          <DeleteIcon fontSize="small" />
+                          <Trash2 size={18} />
                         </IconButton>
                       </TableCell>
                     </TableRow>
@@ -168,17 +181,26 @@ export default function ChefDashboard() {
 
       <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
         <Box sx={{ p: 3, minWidth: 300 }}>
-          <Typography fontWeight="bold" mb={2}>
-            Delete Recipe?
-          </Typography>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
+            <AlertCircle size={24} color="#dc2626" />
+            <Typography fontWeight="bold">
+              Delete Recipe?
+            </Typography>
+          </Box>
           <Typography color="text.secondary" mb={3}>
             This action cannot be undone.
           </Typography>
           <Box sx={{ display: "flex", gap: 2, justifyContent: "flex-end" }}>
-            <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
+            <Button 
+              startIcon={<X size={18} />}
+              onClick={() => setDeleteDialogOpen(false)}
+            >
+              Cancel
+            </Button>
             <Button
               variant="contained"
               color="error"
+              startIcon={<Trash2 size={18} />}
               onClick={handleConfirmDelete}
             >
               Delete

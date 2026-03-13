@@ -9,9 +9,7 @@ import {
   Alert,
   CircularProgress,
 } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import SaveIcon from "@mui/icons-material/Save";
-import CancelIcon from "@mui/icons-material/Cancel";
+import { Edit, Save, X, Calendar } from "lucide-react";
 import Sidebar from "../../components/Sidebar";
 import ChefHeader from "../../components/ChefHeader";
 import { useAuth } from "../../context/AuthContext";
@@ -147,9 +145,12 @@ export default function ChefProfile() {
 
                 {/* QUICK INFO */}
                 <Box sx={{ p: 2, backgroundColor: "#f9f9f9", borderRadius: 1, textAlign: "center" }}>
-                  <Typography variant="caption" sx={{ display: "block", mb: 1, color: "#666", fontWeight: 600 }}>
-                    Member Since
-                  </Typography>
+                  <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 0.5, mb: 1 }}>
+                    <Calendar size={14} color="#666" />
+                    <Typography variant="caption" sx={{ color: "#666", fontWeight: 600 }}>
+                      Member Since
+                    </Typography>
+                  </Box>
                   <Typography variant="body2" sx={{ fontWeight: 600, color: "#333" }}>
                     {user?.createdAt 
                       ? new Date(user.createdAt).toLocaleDateString('en-US', { 
@@ -221,7 +222,7 @@ export default function ChefProfile() {
                   {!isEditing ? (
                     <Button
                       variant="contained"
-                      startIcon={<EditIcon />}
+                      startIcon={<Edit size={18} />}
                       onClick={() => setIsEditing(true)}
                       sx={{ background: "#3a5f23", "&:hover": { background: "#2d4620" } }}
                     >
@@ -231,7 +232,7 @@ export default function ChefProfile() {
                     <>
                       <Button
                         variant="contained"
-                        startIcon={<SaveIcon />}
+                        startIcon={loading ? null : <Save size={18} />}
                         onClick={handleSave}
                         disabled={loading}
                         sx={{ background: "#3a5f23", "&:hover": { background: "#2d4620" } }}
@@ -240,7 +241,7 @@ export default function ChefProfile() {
                       </Button>
                       <Button
                         variant="outlined"
-                        startIcon={<CancelIcon />}
+                        startIcon={<X size={18} />}
                         onClick={handleCancel}
                         disabled={loading}
                       >

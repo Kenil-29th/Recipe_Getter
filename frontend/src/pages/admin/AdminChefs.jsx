@@ -19,8 +19,7 @@ import {
   Pagination,
   Button,
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import SearchIcon from "@mui/icons-material/Search";
+import { Trash2, Search, AlertCircle, X } from "lucide-react";
 import Sidebar from "../../components/Sidebar";
 import ChefHeader from "../../components/ChefHeader";
 import { useAuth } from "../../context/AuthContext";
@@ -110,7 +109,7 @@ export default function AdminChefs() {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <SearchIcon />
+                    <Search size={20} color="#666" />
                   </InputAdornment>
                 ),
               }}
@@ -161,9 +160,12 @@ export default function AdminChefs() {
                           <IconButton
                             size="small"
                             onClick={() => handleDeleteClick(chef._id)}
-                            color="error"
+                            sx={{ 
+                              color: "#dc2626",
+                              "&:hover": { backgroundColor: "#fee2e2" }
+                            }}
                           >
-                            <DeleteIcon fontSize="small" />
+                            <Trash2 size={18} />
                           </IconButton>
                         </TableCell>
                       </TableRow>
@@ -188,17 +190,26 @@ export default function AdminChefs() {
 
       <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
         <Box sx={{ p: 3, minWidth: 300 }}>
-          <Typography fontWeight="bold" mb={2}>
-            Delete Chef?
-          </Typography>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
+            <AlertCircle size={24} color="#dc2626" />
+            <Typography fontWeight="bold">
+              Delete Chef?
+            </Typography>
+          </Box>
           <Typography color="text.secondary" mb={3}>
             This action cannot be undone.
           </Typography>
           <Box sx={{ display: "flex", gap: 2, justifyContent: "flex-end" }}>
-            <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
+            <Button 
+              startIcon={<X size={18} />}
+              onClick={() => setDeleteDialogOpen(false)}
+            >
+              Cancel
+            </Button>
             <Button
               variant="contained"
               color="error"
+              startIcon={<Trash2 size={18} />}
               onClick={handleConfirmDelete}
             >
               Delete

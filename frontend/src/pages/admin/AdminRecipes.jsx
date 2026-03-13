@@ -19,8 +19,7 @@ import {
   Pagination,
   Button,
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import SearchIcon from "@mui/icons-material/Search";
+import { Trash2, Search, CheckCircle, Clock, AlertCircle, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../../components/Sidebar";
 import ChefHeader from "../../components/ChefHeader";
@@ -111,7 +110,7 @@ export default function AdminRecipes() {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <SearchIcon />
+                    <Search size={20} color="#666" />
                   </InputAdornment>
                 ),
               }}
@@ -165,22 +164,31 @@ export default function AdminRecipes() {
                         <TableCell align="center">{recipe.servings || "-"}</TableCell>
                         <TableCell align="center">
                           {recipe.isPublished ? (
-                            <Typography sx={{ color: "green", fontSize: 12 }}>
-                              Published
-                            </Typography>
+                            <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 0.5 }}>
+                              <CheckCircle size={14} color="green" />
+                              <Typography sx={{ color: "green", fontSize: 12 }}>
+                                Published
+                              </Typography>
+                            </Box>
                           ) : (
-                            <Typography sx={{ color: "orange", fontSize: 12 }}>
-                              Draft
-                            </Typography>
+                            <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 0.5 }}>
+                              <Clock size={14} color="orange" />
+                              <Typography sx={{ color: "orange", fontSize: 12 }}>
+                                Draft
+                              </Typography>
+                            </Box>
                           )}
                         </TableCell>
                         <TableCell align="center">
                           <IconButton
                             size="small"
                             onClick={() => handleDeleteClick(recipe._id)}
-                            color="error"
+                            sx={{ 
+                              color: "#dc2626",
+                              "&:hover": { backgroundColor: "#fee2e2" }
+                            }}
                           >
-                            <DeleteIcon fontSize="small" />
+                            <Trash2 size={18} />
                           </IconButton>
                         </TableCell>
                       </TableRow>
@@ -205,17 +213,26 @@ export default function AdminRecipes() {
 
       <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
         <Box sx={{ p: 3, minWidth: 300 }}>
-          <Typography fontWeight="bold" mb={2}>
-            Delete Recipe?
-          </Typography>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
+            <AlertCircle size={24} color="#dc2626" />
+            <Typography fontWeight="bold">
+              Delete Recipe?
+            </Typography>
+          </Box>
           <Typography color="text.secondary" mb={3}>
             This action cannot be undone.
           </Typography>
           <Box sx={{ display: "flex", gap: 2, justifyContent: "flex-end" }}>
-            <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
+            <Button 
+              startIcon={<X size={18} />}
+              onClick={() => setDeleteDialogOpen(false)}
+            >
+              Cancel
+            </Button>
             <Button
               variant="contained"
               color="error"
+              startIcon={<Trash2 size={18} />}
               onClick={handleConfirmDelete}
             >
               Delete

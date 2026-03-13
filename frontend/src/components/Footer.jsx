@@ -56,7 +56,7 @@ export default function Footer() {
 
   <Typography variant="body2" sx={{ mb: 2, color: "#555" }}>
     Transform ingredients into delicious meals. Discover, cook, and
-    enjoy recipes crafted for every kitchen.
+    enjoy recipes made for every kitchen.
   </Typography>
 
   <Box>

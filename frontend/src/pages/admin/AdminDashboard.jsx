@@ -14,6 +14,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import { BookOpen, Users, Activity, Star, TrendingUp, CheckCircle, Clock } from "lucide-react";
 import Sidebar from "../../components/Sidebar";
 import ChefHeader from "../../components/ChefHeader";
 import { useAuth } from "../../context/AuthContext";
@@ -61,10 +62,10 @@ export default function AdminDashboard() {
   }
 
   const statItems = [
-    { title: "Total Recipes", value: stats?.totalRecipes || 0 },
-    { title: "Total Chefs", value: stats?.totalChefs || 0 },
-    { title: "Active Users", value: stats?.activeUsers || 0 },
-    { title: "Avg Rating", value: (stats?.avgRating || 0).toFixed(2) },
+    { title: "Total Recipes", value: stats?.totalRecipes || 0, icon: BookOpen, color: "#3a5f23" },
+    { title: "Total Chefs", value: stats?.totalChefs || 0, icon: Users, color: "#2563eb" },
+    { title: "Active Users", value: stats?.activeUsers || 0, icon: Activity, color: "#dc2626" },
+    { title: "Avg Rating", value: (stats?.avgRating || 0).toFixed(2), icon: Star, color: "#f59e0b" },
   ];
 
   console.log("Stats Object:", stats);
@@ -90,25 +91,56 @@ export default function AdminDashboard() {
 
           {/* STATS */}
           <Grid container spacing={2} sx={{ mb: 4 }}>
-            {statItems.map((item, index) => (
-              <Grid item xs={12} md={3} key={index}>
-                <Paper sx={{ p: 3, borderRadius: 3, textAlign: "center" }}>
-                  <Typography variant="h4" fontWeight="bold" sx={{ color: "#3a5f23" }}>
-                    {item.value}
-                  </Typography>
-                  <Typography color="text.secondary" sx={{ mt: 1 }}>
-                    {item.title}
-                  </Typography>
-                </Paper>
-              </Grid>
-            ))}
+            {statItems.map((item, index) => {
+              const IconComponent = item.icon;
+              return (
+                <Grid item xs={12} md={3} key={index}>
+                  <Paper 
+                    sx={{ 
+                      p: 3, 
+                      borderRadius: 3, 
+                      textAlign: "center",
+                      transition: "transform 0.2s, box-shadow 0.2s",
+                      "&:hover": {
+                        transform: "translateY(-4px)",
+                        boxShadow: "0 8px 16px rgba(0,0,0,0.1)"
+                      }
+                    }}
+                  >
+                    <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
+                      <Box 
+                        sx={{ 
+                          p: 1.5, 
+                          borderRadius: 2, 
+                          backgroundColor: `${item.color}15`,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center"
+                        }}
+                      >
+                        <IconComponent size={28} color={item.color} />
+                      </Box>
+                    </Box>
+                    <Typography variant="h4" fontWeight="bold" sx={{ color: item.color }}>
+                      {item.value}
+                    </Typography>
+                    <Typography color="text.secondary" sx={{ mt: 1, fontSize: 14 }}>
+                      {item.title}
+                    </Typography>
+                  </Paper>
+                </Grid>
+              );
+            })}
           </Grid>
 
           {/* RECENT RECIPES */}
           <Paper sx={{ p: 3, borderRadius: 3 }}>
-            <Typography variant="h6" fontWeight="bold" sx={{ mb: 2 }}>
-              Recent Recipes
-            </Typography>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
+              <TrendingUp size={20} color="#3a5f23" />
+              <Typography variant="h6" fontWeight="bold">
+                Recent Recipes
+              </Typography>
+            </Box>
 
             {recentRecipes.length === 0 ? (
               <Typography color="text.secondary">No recipes yet</Typography>
