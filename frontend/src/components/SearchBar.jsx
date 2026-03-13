@@ -62,7 +62,7 @@ function SearchBar() {
       sx={{
         width: "100%",
         minHeight: "30vh",
-        backgroundColor: "rgba(248, 249, 250, 0.1)",
+        backgroundColor: "transparent",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -75,12 +75,14 @@ function SearchBar() {
         sx={{
           display: "flex",
           alignItems: "center",
-          backgroundColor: "#fff",
+          backgroundColor: "rgba(255, 255, 255, 0.95)",
+          backdropFilter: "blur(10px)",
           borderRadius: "40px",
           p: 1,
           width: "90%",
           maxWidth: "700px",
-          boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+          boxShadow: "0 8px 24px rgba(0,0,0,0.3)",
+          border: "1px solid rgba(255, 255, 255, 0.3)",
         }}
       >
         <TextField
@@ -121,16 +123,22 @@ function SearchBar() {
       </Box>
 
       {/* VALIDATION MESSAGE */}
-      {ingredients.length < MIN_REQUIRED && (
+      {ingredients.length < MIN_REQUIRED && ingredients.length > 0 && (
   <Typography
     sx={{
       mt: 1.5,
-      color: "#3700ff",
+      color: "#ffffff",
+      backgroundColor: "rgba(58, 95, 35, 0.8)",
+      backdropFilter: "blur(10px)",
       fontSize: 14,
       fontWeight: 600,
       width: "90%",
       maxWidth: "700px",
-      textAlign: "left",
+      textAlign: "center",
+      px: 3,
+      py: 1.5,
+      borderRadius: 3,
+      boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
     }}
   >
     Add at least {remaining} more ingredient{remaining > 1 && "s"} to continue
@@ -162,7 +170,21 @@ function SearchBar() {
       </Stack>
 
       {error && (
-        <Alert severity="error" sx={{ mt: 3, width: "90%", maxWidth: "700px" }}>
+        <Alert 
+          severity="error" 
+          sx={{ 
+            mt: 3, 
+            width: "90%", 
+            maxWidth: "700px",
+            backgroundColor: "rgba(211, 47, 47, 0.95)",
+            backdropFilter: "blur(10px)",
+            color: "#fff",
+            borderRadius: 3,
+            boxShadow: "0 4px 12px rgba(211, 47, 47, 0.4)",
+            border: "1px solid rgba(255, 255, 255, 0.2)",
+            "& .MuiAlert-icon": { color: "#fff" }
+          }}
+        >
           {error}
         </Alert>
       )}
@@ -174,23 +196,26 @@ function SearchBar() {
             mt: 4,
             width: "90%",
             maxWidth: "700px",
-            backgroundColor: "#f3f3f3",
-            borderRadius: "12px",
+            backgroundColor: "rgba(255, 255, 255, 0.95)",
+            backdropFilter: "blur(10px)",
+            borderRadius: "16px",
             p: 3,
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
             flexWrap: "wrap",
             gap: 2,
+            boxShadow: "0 8px 24px rgba(0,0,0,0.3)",
+            border: "1px solid rgba(255, 255, 255, 0.3)",
           }}
         >
           <Box>
-            <Box sx={{ fontWeight: 600, fontSize: 18 }}>
+            <Box sx={{ fontWeight: 700, fontSize: 18, color: "#1a1a1a" }}>
               Ready for a recipe?
             </Box>
 
-            <Box sx={{ color: "#6b7280", fontSize: 14, mt: 0.5 }}>
-              Generate recipes from your ingredients.
+            <Box sx={{ color: "#666", fontSize: 14, mt: 0.5 }}>
+              Generate delicious recipes from your ingredients.
             </Box>
           </Box>
 
@@ -198,14 +223,20 @@ function SearchBar() {
             variant="contained"
             disabled={loading}
             sx={{
-              backgroundColor: "rgb(0, 0, 0)",
+              backgroundColor: "#3a5f23",
               textTransform: "none",
-              borderRadius: "8px",
-              px: 3,
-              py: 1,
+              borderRadius: "12px",
+              px: 4,
+              py: 1.5,
+              fontWeight: 600,
+              fontSize: 16,
+              boxShadow: "0 4px 12px rgba(58, 95, 35, 0.4)",
               "&:hover": {
-                backgroundColor: "#3e7664",
+                backgroundColor: "#2d4a1c",
+                transform: "translateY(-2px)",
+                boxShadow: "0 6px 16px rgba(58, 95, 35, 0.5)",
               },
+              transition: "all 0.3s ease",
             }}
             onClick={handleGetRecipe}
           >
@@ -217,9 +248,21 @@ function SearchBar() {
       {/* RECIPES DISPLAY */}
       {recipes.length > 0 && (
         <Box sx={{ width: "90%", maxWidth: "900px" }}>
-          <Box
+          <Typography
+            variant="h5"
             sx={{
               mt: 4,
+              mb: 3,
+              color: "#ffffff",
+              fontWeight: 700,
+              textAlign: "center",
+              textShadow: "2px 2px 8px rgba(0,0,0,0.5)",
+            }}
+          >
+            Found {recipes.length} Perfect {recipes.length === 1 ? 'Recipe' : 'Recipes'} for You!
+          </Typography>
+          <Box
+            sx={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
               gap: 3,
@@ -231,14 +274,17 @@ function SearchBar() {
                 key={recipe._id}
                 onClick={() => navigate(`/recipe/${recipe._id}`)}
                 sx={{
-                  backgroundColor: "#fff",
-                  borderRadius: "12px",
+                  backgroundColor: "rgba(255, 255, 255, 0.95)",
+                  backdropFilter: "blur(10px)",
+                  borderRadius: "16px",
                   p: 2,
                   cursor: "pointer",
-                  transition: "all 0.3s",
+                  transition: "all 0.3s ease",
+                  border: "1px solid rgba(255, 255, 255, 0.3)",
                   "&:hover": {
-                    boxShadow: "0 8px 16px rgba(0,0,0,0.1)",
-                    transform: "translateY(-4px)",
+                    boxShadow: "0 12px 24px rgba(58, 95, 35, 0.4)",
+                    transform: "translateY(-8px) scale(1.02)",
+                    backgroundColor: "rgba(255, 255, 255, 1)",
                   },
                 }}
               >
@@ -249,22 +295,33 @@ function SearchBar() {
                     alt={recipe.title}
                     sx={{
                       width: "100%",
-                      height: 150,
+                      height: 180,
                       objectFit: "cover",
-                      borderRadius: "8px",
-                      mb: 1,
+                      borderRadius: "12px",
+                      mb: 1.5,
                     }}
                   />
                 )}
-                <Typography fontWeight="600" sx={{ mb: 0.5 }}>
+                <Typography fontWeight="700" sx={{ mb: 0.5, fontSize: 16, color: "#1a1a1a" }}>
                   {recipe.title}
                 </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                  By {recipe.chefName}
+                <Typography variant="body2" sx={{ mb: 1, color: "#666", fontStyle: "italic" }}>
+                  {recipe.chefName}
                 </Typography>
-                <Typography variant="caption" sx={{ color: "green", fontWeight: "500" }}>
-                  Match: {recipe.matchScore} ingredients
-                </Typography>
+                <Box
+                  sx={{
+                    display: "inline-block",
+                    backgroundColor: "#e8f5e9",
+                    color: "#2e7d32",
+                    px: 1.5,
+                    py: 0.5,
+                    borderRadius: 2,
+                    fontSize: 12,
+                    fontWeight: 600,
+                  }}
+                >
+                  Match: {recipe.matchScore}
+                </Box>
               </Box>
             ))}
           </Box>
@@ -272,17 +329,25 @@ function SearchBar() {
           {recipes.length > 6 && (
             <Box sx={{ textAlign: "center" }}>
               <Button
-                variant="outlined"
+                variant="contained"
                 sx={{
-                  borderColor: "#000",
-                  color: "#000",
+                  backgroundColor: "rgba(255, 255, 255, 0.95)",
+                  backdropFilter: "blur(10px)",
+                  color: "#3a5f23",
                   textTransform: "none",
-                  borderRadius: "8px",
+                  borderRadius: "12px",
                   px: 4,
-                  py: 1,
+                  py: 1.5,
+                  fontWeight: 600,
+                  border: "1px solid rgba(255, 255, 255, 0.3)",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
                   "&:hover": {
-                    backgroundColor: "#f0f0f0",
+                    backgroundColor: "#3a5f23",
+                    color: "#fff",
+                    transform: "translateY(-2px)",
+                    boxShadow: "0 6px 16px rgba(58, 95, 35, 0.4)",
                   },
+                  transition: "all 0.3s ease",
                 }}
                 onClick={() => navigate("/search")}
               >

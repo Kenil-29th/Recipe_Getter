@@ -1,4 +1,5 @@
 import React from "react";
+import Logo from "../assets/chef.png"
 import {
   Box,
   Container,
@@ -21,46 +22,59 @@ export default function Footer() {
         py: 6,
         display: "flex",
         justifyContent: "center",
+        position: "relative",
+        zIndex: 10,
       }}
     >
       <Container
         maxWidth="lg"
         sx={{
-          backgroundColor: "rgba(255, 255, 255, 0.12)",
+          backgroundColor: "rgba(255, 255, 255, 0.95)",
           borderRadius: "20px",
           p: { xs: 3, md: 5 },
-          boxShadow: "0 4px 20px rgba(0,0,0,0.05)",
-          backdropFilter: "blur(8px)",
+          boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
+          backdropFilter: "blur(12px)",
+          border: "1px solid rgba(255, 255, 255, 0.3)",
         }}
       >
         <Grid container spacing={4} alignItems="flex-start">
           
           {/* LEFT SIDE — BRAND */}
           <Grid item xs={12} md={6}>
-            <Typography variant="h6" fontWeight={600} gutterBottom>
-              Virtual Chef
-            </Typography>
 
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Transform ingredients into delicious meals. Discover, cook, and
-              enjoy recipes crafted for every kitchen.
-            </Typography>
+  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+    <img 
+      src={Logo} 
+      alt="Logo" 
+      style={{ width: 28, height: 28 }}
+    />
 
-            <Box>
-              <IconButton>
-                <TwitterIcon fontSize="small" />
-              </IconButton>
-              <IconButton>
-                <InstagramIcon fontSize="small" />
-              </IconButton>
-              <IconButton>
-                <LinkedInIcon fontSize="small" />
-              </IconButton>
-              <IconButton>
-                <GitHubIcon fontSize="small" />
-              </IconButton>
-            </Box>
-          </Grid>
+    <Typography variant="h6" fontWeight={600} sx={{ color: "#1a1a1a" }}>
+      Virtual Chef
+    </Typography>
+  </Box>
+
+  <Typography variant="body2" sx={{ mb: 2, color: "#555" }}>
+    Transform ingredients into delicious meals. Discover, cook, and
+    enjoy recipes crafted for every kitchen.
+  </Typography>
+
+  <Box>
+    <IconButton sx={{ color: "#3a5f23" }}>
+      <TwitterIcon fontSize="small" />
+    </IconButton>
+    <IconButton sx={{ color: "#3a5f23" }}>
+      <InstagramIcon fontSize="small" />
+    </IconButton>
+    <IconButton sx={{ color: "#3a5f23" }}>
+      <LinkedInIcon fontSize="small" />
+    </IconButton>
+    <IconButton sx={{ color: "#3a5f23" }}>
+      <GitHubIcon fontSize="small" />
+    </IconButton>
+  </Box>
+
+</Grid>
 
           {/* RIGHT SIDE — COMPANY (pushed to right) */}
           <Grid
@@ -73,7 +87,7 @@ export default function Footer() {
             }}
           >
             <Box>
-              <Typography fontWeight={600} gutterBottom>
+              <Typography fontWeight={600} gutterBottom sx={{ color: "#1a1a1a" }}>
                 Company
               </Typography>
 
@@ -81,11 +95,11 @@ export default function Footer() {
                 <Typography
                   key={link}
                   variant="body2"
-                  color="text.secondary"
                   sx={{
                     mb: 1,
                     cursor: "pointer",
-                    "&:hover": { color: "#000" },
+                    color: "#555",
+                    "&:hover": { color: "#3a5f23", fontWeight: 500 },
                   }}
                 >
                   {link}
@@ -98,7 +112,7 @@ export default function Footer() {
         {/* BOTTOM ROW */}
         <Box
           sx={{
-            borderTop: "1px solid #eee",
+            borderTop: "1px solid #ddd",
             mt: 4,
             pt: 2,
             display: "flex",
@@ -108,18 +122,18 @@ export default function Footer() {
             gap: 1,
           }}
         >
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" sx={{ color: "#555" }}>
             © 2026 Virtual Chef. All rights reserved.
           </Typography>
 
           <Box sx={{ display: "flex", gap: 2 }}>
-            <Link href="#" underline="hover" color="inherit">
+            <Link href="#" underline="hover" sx={{ color: "#555", "&:hover": { color: "#3a5f23" } }}>
               Privacy Policy
             </Link>
-            <Link href="#" underline="hover" color="inherit">
+            <Link href="#" underline="hover" sx={{ color: "#555", "&:hover": { color: "#3a5f23" } }}>
               Terms of Service
             </Link>
-            <Link href="#" underline="hover" color="inherit">
+            <Link href="#" underline="hover" sx={{ color: "#555", "&:hover": { color: "#3a5f23" } }}>
               Cookies Settings
             </Link>
           </Box>
