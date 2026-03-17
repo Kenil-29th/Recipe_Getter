@@ -11,6 +11,7 @@ import {
   Alert,
   CircularProgress,
 } from "@mui/material";
+import { Upload, Plus, X, CheckCircle, Image as ImageIcon } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import Sidebar from "../../components/Sidebar";
 import ChefHeader from "../../components/ChefHeader";
@@ -204,12 +205,16 @@ export default function AddRecipePage() {
               </Typography>
             </Box>
 
-            <Box>
-              <Button sx={{ mr: 2 }} onClick={() => navigate("/chef/dashboard")}>
+            <Box sx={{ display: "flex", gap: 2 }}>
+              <Button 
+                startIcon={<X size={18} />}
+                onClick={() => navigate("/chef/dashboard")}
+              >
                 Cancel
               </Button>
               <Button
                 variant="contained"
+                startIcon={loading ? null : <CheckCircle size={18} />}
                 color="success"
                 onClick={handlePublish}
                 disabled={loading || !readyToPublish}
@@ -316,7 +321,7 @@ export default function AddRecipePage() {
                     />
                   ) : (
                     <Box sx={{ textAlign: "center" }}>
-                      <Typography color="#fff" sx={{ mb: 1 }}>📷</Typography>
+                      <ImageIcon size={48} color="#fff" style={{ marginBottom: 8 }} />
                       <Typography color="#fff" variant="body2">No image selected</Typography>
                     </Box>
                   )}
@@ -327,6 +332,7 @@ export default function AddRecipePage() {
                   variant="outlined"
                   component="label"
                   disabled={loading}
+                  startIcon={<Upload size={18} />}
                 >
                   {imagePreview ? 'Change Image' : 'Upload Image'}
                   <input 
@@ -376,6 +382,7 @@ export default function AddRecipePage() {
                   fullWidth
                   variant="contained"
                   color="success"
+                  startIcon={loading ? null : <CheckCircle size={18} />}
                   sx={{ mt: 3 }}
                   onClick={handlePublish}
                   disabled={!readyToPublish || loading}

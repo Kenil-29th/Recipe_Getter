@@ -108,13 +108,13 @@ function SearchBar() {
           variant="contained"
           disabled={loading}
           sx={{
-            backgroundColor: "#000",
+            backgroundColor: "#2d4a1c",
             borderRadius: "30px",
             textTransform: "none",
             px: 4,
             py: 1,
             "&:hover": {
-              backgroundColor: "#3e7664",
+              backgroundColor: "#000",
             },
           }}
         >
@@ -122,7 +122,7 @@ function SearchBar() {
         </Button>
       </Box>
 
-      {/* VALIDATION MESSAGE */}
+      {/* VALIDATION MESSAGE
       {ingredients.length < MIN_REQUIRED && ingredients.length > 0 && (
   <Typography
     sx={{
@@ -143,7 +143,21 @@ function SearchBar() {
   >
     Add at least {remaining} more ingredient{remaining > 1 && "s"} to continue
   </Typography>
-)}
+)} */}
+            {/* VALIDATION MESSAGE */}
+        {ingredients.length < MIN_REQUIRED && ingredients.length > 0 && (
+          <Typography
+            sx={{
+              mt: 1.5,
+              color: "#ffffff",
+              fontSize: 14,
+              fontWeight: 600,
+              textAlign: "center",
+            }}
+          >
+            Add at least {remaining} more ingredient{remaining > 1 && "s"} to continue
+          </Typography>
+        )}
 
       {/* CHIP LIST */}
       <Stack
@@ -223,7 +237,7 @@ function SearchBar() {
             variant="contained"
             disabled={loading}
             sx={{
-              backgroundColor: "#3a5f23",
+              backgroundColor:"#2d4a1c",
               textTransform: "none",
               borderRadius: "12px",
               px: 4,
@@ -232,8 +246,8 @@ function SearchBar() {
               fontSize: 16,
               boxShadow: "0 4px 12px rgba(58, 95, 35, 0.4)",
               "&:hover": {
-                backgroundColor: "#2d4a1c",
-                transform: "translateY(-2px)",
+                backgroundColor: "#000",
+                // transform: "translateY(-2px)",
                 boxShadow: "0 6px 16px rgba(58, 95, 35, 0.5)",
               },
               transition: "all 0.3s ease",
@@ -242,6 +256,44 @@ function SearchBar() {
           >
             {loading ? <CircularProgress size={24} color="inherit" /> : "Get Recipes"}
           </Button>
+        </Box>
+      )}
+
+      {/* NO RECIPES FOUND MESSAGE */}
+      {!loading && recipes.length === 0 && ingredients.length >= MIN_REQUIRED && !error && (
+        <Box
+          sx={{
+            mt: 4,
+            width: "90%",
+            maxWidth: "700px",
+            backgroundColor: "rgba(255, 255, 255, 0.95)",
+            backdropFilter: "blur(10px)",
+            borderRadius: "16px",
+            p: 4,
+            textAlign: "center",
+            boxShadow: "0 8px 24px rgba(0,0,0,0.3)",
+            border: "1px solid rgba(255, 255, 255, 0.3)",
+          }}
+        >
+          <Typography
+            variant="h5"
+            sx={{
+              fontWeight: 700,
+              color: "#1a1a1a",
+              mb: 2,
+            }}
+          >
+            No Recipes Found
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              color: "#666",
+              mb: 2,
+            }}
+          >
+            We couldn't find any recipes matching your ingredients.
+          </Typography>
         </Box>
       )}
 

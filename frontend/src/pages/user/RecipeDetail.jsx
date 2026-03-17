@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import WordCloud3D from"../../components/WordCloud3D";
+import WordCloud3D from "../../components/WordCloud3D";
 import {
   Box,
   Typography,
@@ -61,164 +61,174 @@ export default function RecipeDetail() {
       </Box>
     );
   }
-  
 
   return (
-    
-    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: "#f5f5f5" }}>
-      <WordCloud3D/>
-  <Box sx={{ position: 'relative', zIndex: 1 }}>
-    <Header />
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', position: 'relative', overflow: 'hidden' }}>
+      {/* 3D Word Cloud Background */}
+      <WordCloud3D />
       
-
-      <Box sx={{ flex: 1, display: "flex", justifyContent: "center", p: 3 ,position: 'relative' , zIndex:1}}>
+      {/* Gradient overlay for better readability */}
+      <Box sx={{ 
+        position: 'fixed', 
+        top: 0, 
+        left: 0, 
+        width: '100%', 
+        height: '100%', 
+        background: 'linear-gradient(135deg, rgba(10, 10, 21, 0.85) 0%, rgba(58, 95, 35, 0.75) 50%, rgba(10, 10, 21, 0.85) 100%)',
+        zIndex: 1,
+        pointerEvents: 'none'
+      }} />
+      
+      {/* Content with higher z-index */}
+      <Box sx={{ position: 'relative', zIndex: 3 }}>
+        <Header />
         
-        <Box
-          sx={{
-            width: "100%",
-            maxWidth: 1200,
-            backgroundColor: "#fff",
-            borderRadius: "20px",
-            p: 4,
-            boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-          }}
-        >
-          {/* TITLE */}
-          <Typography
-            sx={{
-              fontFamily: '"Playfair Display", serif',
-              fontSize: 42,
-              fontWeight: "bold",
-              mb: 1,
-            }}
-          >
-            {recipe.title}
-          </Typography>
-
-          <Typography sx={{ color: "#666", fontSize: 14, mb: 2 }}>
-            By <strong>{recipe.chefName}</strong>
-            {recipe.chefId?.bio && (
-              <>
-                {" • "}
-                <span style={{ fontStyle: "italic" }}>{recipe.chefId.bio}</span>
-              </>
-            )}
-            {recipe.category && ` • ${recipe.category}`}
-          </Typography>
-
-          {/* META */}
-          <Box sx={{ display: "flex", gap: 3, mb: 3, flexWrap: "wrap" }}>
-            {recipe.prepTime && (
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <TimerIcon fontSize="small" sx={{ color: "#3a5f23" }} />
-                <Typography variant="body2">Prep: {recipe.prepTime} min</Typography>
-              </Box>
-            )}
-
-            {recipe.cookTime && (
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <AccessTimeIcon fontSize="small" sx={{ color: "#3a5f23" }} />
-                <Typography variant="body2">Cook: {recipe.cookTime} min</Typography>
-              </Box>
-            )}
-
-            {recipe.servings && (
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <RestaurantIcon fontSize="small" sx={{ color: "#3a5f23" }} />
-                <Typography variant="body2">{recipe.servings} servings</Typography>
-              </Box>
-            )}
-          </Box>
-          
-
-          {/* IMAGE */}
-          {recipe.image && (
-            <Box
-              component="img"
-              src={recipe.image}
-              alt={recipe.title}
-              sx={{
-                width: "100%",
-                height: 400,
-                objectFit: "cover",
-                borderRadius: "18px",
-                mb: 4,
-              }}
-            />
-          )}
-
-          {/* CONTENT */}
+        <Box sx={{ flex: 1, display: "flex", justifyContent: "center", p: 3 }}>
           <Box
             sx={{
-              display: "grid",
-              gridTemplateColumns: { xs: "1fr", md: "300px 1fr" },
-              gap: 4,
+              width: "100%",
+              maxWidth: 1200,
+              backgroundColor: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(10px)',
+              borderRadius: "20px",
+              p: 4,
+              boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
+              border: '1px solid rgba(255, 255, 255, 0.2)',
             }}
           >
-            {/* INGREDIENTS */}
-            <Card
+            {/* TITLE */}
+            <Typography
               sx={{
-                backgroundColor: "#f9f9f9",
-                p: 3,
-                borderRadius: 2,
-                height: "fit-content",
+                fontFamily: '"Playfair Display", serif',
+                fontSize: 42,
+                fontWeight: "bold",
+                mb: 1,
               }}
             >
-              <Typography fontWeight="bold" mb={2} sx={{ fontSize: 16 }}>
-                INGREDIENTS
-              </Typography>
+              {recipe.title}
+            </Typography>
 
-              {recipe.ingredients && recipe.ingredients.length > 0 ? (
-                recipe.ingredients.map((item, i) => (
-                  <Box key={i} sx={{ mb: 1 }}>
-                    <Chip
-                      label={item}
-                      variant="outlined"
-                      size="small"
-                      sx={{ width: "100%" }}
-                    />
-                  </Box>
-                ))
-              ) : (
-                <Typography variant="body2" color="text.secondary">
-                  No ingredients listed
-                </Typography>
+            <Typography sx={{ color: "#666", fontSize: 14, mb: 2 }}>
+              By <strong>{recipe.chefName}</strong>
+              {recipe.chefId?.bio && (
+                <>
+                  {" • "}
+                  <span style={{ fontStyle: "italic" }}>{recipe.chefId.bio}</span>
+                </>
               )}
-            </Card>
+              {recipe.category && ` • ${recipe.category}`}
+            </Typography>
 
-            {/* DIRECTIONS */}
-            <Card
+            {/* META */}
+            <Box sx={{ display: "flex", gap: 3, mb: 3, flexWrap: "wrap" }}>
+              {recipe.prepTime && (
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <TimerIcon fontSize="small" sx={{ color: "#3a5f23" }} />
+                  <Typography variant="body2">Prep: {recipe.prepTime} min</Typography>
+                </Box>
+              )}
+
+              {recipe.cookTime && (
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <AccessTimeIcon fontSize="small" sx={{ color: "#3a5f23" }} />
+                  <Typography variant="body2">Cook: {recipe.cookTime} min</Typography>
+                </Box>
+              )}
+
+              {recipe.servings && (
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <RestaurantIcon fontSize="small" sx={{ color: "#3a5f23" }} />
+                  <Typography variant="body2">{recipe.servings} servings</Typography>
+                </Box>
+              )}
+            </Box>
+
+            {/* IMAGE */}
+            {recipe.image && (
+              <Box
+                component="img"
+                src={recipe.image}
+                alt={recipe.title}
+                sx={{
+                  width: "100%",
+                  height: 400,
+                  objectFit: "cover",
+                  borderRadius: "18px",
+                  mb: 4,
+                }}
+              />
+            )}
+
+            {/* CONTENT */}
+            <Box
               sx={{
-                backgroundColor: "#f9f9f9",
-                p: 3,
-                borderRadius: 2,
+                display: "grid",
+                gridTemplateColumns: { xs: "1fr", md: "300px 1fr" },
+                gap: 4,
               }}
             >
-              <Typography fontWeight="bold" mb={2} sx={{ fontSize: 16 }}>
-                DIRECTIONS
-              </Typography>
+              {/* INGREDIENTS */}
+              <Card
+                sx={{
+                  backgroundColor: "#f9f9f9",
+                  p: 3,
+                  borderRadius: 2,
+                  height: "fit-content",
+                }}
+              >
+                <Typography fontWeight="bold" mb={2} sx={{ fontSize: 16 }}>
+                  INGREDIENTS
+                </Typography>
 
-              {recipe.instructions ? (
-                <Typography
-                  variant="body2"
-                  sx={{ lineHeight: 1.8, whiteSpace: "pre-wrap" }}
-                >
-                  {recipe.instructions}
+                {recipe.ingredients && recipe.ingredients.length > 0 ? (
+                  recipe.ingredients.map((item, i) => (
+                    <Box key={i} sx={{ mb: 1 }}>
+                      <Chip
+                        label={item}
+                        variant="outlined"
+                        size="small"
+                        sx={{ width: "100%" }}
+                      />
+                    </Box>
+                  ))
+                ) : (
+                  <Typography variant="body2" color="text.secondary">
+                    No ingredients listed
+                  </Typography>
+                )}
+              </Card>
+
+              {/* DIRECTIONS */}
+              <Card
+                sx={{
+                  backgroundColor: "#f9f9f9",
+                  p: 3,
+                  borderRadius: 2,
+                }}
+              >
+                <Typography fontWeight="bold" mb={2} sx={{ fontSize: 16 }}>
+                  DIRECTIONS
                 </Typography>
-              ) : (
-                <Typography variant="body2" color="text.secondary">
-                  No directions available
-                </Typography>
-              )}
-            </Card>
-            
+
+                {recipe.instructions ? (
+                  <Typography
+                    variant="body2"
+                    sx={{ lineHeight: 1.8, whiteSpace: "pre-wrap" }}
+                  >
+                    {recipe.instructions}
+                  </Typography>
+                ) : (
+                  <Typography variant="body2" color="text.secondary">
+                    No directions available
+                  </Typography>
+                )}
+              </Card>
+            </Box>
           </Box>
         </Box>
-      </Box>
 
-      <Footer />
-    </Box>
+        <Footer />
+      </Box>
     </Box>
   );
 }
-
