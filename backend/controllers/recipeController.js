@@ -1,20 +1,11 @@
 const Recipe = require('../models/Recipe');
 
-/**
- * @desc    Suggest recipes based on available ingredients
- * @route   POST /api/recipes/suggest
- * @access  Public
- *
- * Matching rules:
- *  - Recipe must match MOST of the provided ingredients
- *  - Recipe can have at most 2 extra ingredients beyond what user has
- *  - Results sorted by number of matching ingredients (desc)
- */
-const suggestRecipes = async (req, res, next) => {
-  try {
-    const { ingredients } = req.body;
 
-    if (!ingredients || !Array.isArray(ingredients) || ingredients.length === 0) {
+const suggestRecipes = async (req, res, next) => {//controller to suggest recipe based on the ingredients
+  try {
+    const { ingredients } = req.body;//extract the ingredients array from the body
+
+    if (!ingredients || !Array.isArray(ingredients) || ingredients.length === 0) {//validation
       return res.status(400).json({
         success: false,
         message: 'Please provide an array of ingredients.',
@@ -22,21 +13,21 @@ const suggestRecipes = async (req, res, next) => {
     }
 
     // Normalize user ingredients to lowercase & trimmed
-    const userIngredients = ingredients.map((i) => i.toLowerCase().trim());
+    const userIngredients = ingredients.map((i) => i.toLowerCase().trim());//convert all ingredient to lowercase also trim the with spaces
 
     // Fetch all published recipes
     const allRecipes = await Recipe.find({ isPublished: true });
 
-    const scoredRecipes = allRecipes
-      .map((recipe) => {
+    const scoredRecipes = allRecipes//start processing the recipe
+      .map((recipe) => {//loop through each recipe
         const recipeIngredients = recipe.ingredients.map((i) => i.toLowerCase().trim());
 
         // Count how many user ingredients match this recipe
-        const matchedCount = userIngredients.filter((ui) =>
-          recipeIngredients.some(
+        const matchedCount = userIngredients.filter((ui) =>//filter user ingredient with that match recipe
+          recipeIngredients.some(//check recipe include user ingredient or user includes recipe ingredients
             (ri) => ri.includes(ui) || ui.includes(ri)
           )
-        ).length;
+        ).length;//count matched ingredient
 
         // Count how many recipe ingredients are NOT in user's list (extra ingredients)
         const extraCount = recipeIngredients.filter(
@@ -91,14 +82,10 @@ const suggestRecipes = async (req, res, next) => {
   }
 };
 
-/**
- * @desc    Get a single recipe by ID
- * @route   GET /api/recipes/:id
- * @access  Public
- */
-const getRecipeById = async (req, res, next) => {
+
+const getRecipeById = async (req, res, next) => {//controller to fetch single recipe
   try {
-    const recipe = await Recipe.findById(req.params.id).populate(
+    const recipe = await Recipe.findById(req.params.id).populate(//find recipe by ID and populate chef details
       'chefId',
       'name email bio avatar'
     );

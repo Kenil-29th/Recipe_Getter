@@ -14,7 +14,7 @@ import { useAuth } from "../../context/AuthContext";
 import { authAPI } from "../../services/api";
 
 export default function Login() {
-  const {
+  const {//brain of the form
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
@@ -25,21 +25,21 @@ export default function Login() {
       email: "",
       password: "",
     },
-    mode: "onBlur",
+    mode: "onChange",
   });
 
-  const { login } = useAuth();
-  const navigate = useNavigate();
+  const { login } = useAuth();//saves user + tokken
+  const navigate = useNavigate();//naviagate to the path
 
   const onSubmit = async (data) => {
     try {
-      const response = await authAPI.login(data.email.trim(), data.password);
+      const response = await authAPI.login(data.email.trim(), data.password);//send email and password to the backend
       const { token, user } = response.data.data;
 
-      login(user, token);
+      login(user, token);//saves information
 
       // Redirect based on role
-      if (user.role === "admin") {
+      if (user.role === "admin") {//redirection based on the roles
         navigate("/admin/dashboard");
       } else if (user.role === "chef") {
         navigate("/chef/dashboard");
@@ -88,7 +88,13 @@ export default function Login() {
             },
           })}
           error={!!errors.email}
-          helperText={errors.email?.message}
+          helperText={
+            errors.email ? (
+              <span style={{ color: "#d32f2f", fontSize: 13 }}>
+                 {errors.email.message}
+              </span>
+            ) : null
+          }
           sx={{ mb: 3 }}
           disabled={isSubmitting}
         />
@@ -107,7 +113,13 @@ export default function Login() {
             },
           })}
           error={!!errors.password}
-          helperText={errors.password?.message}
+          helperText={
+            errors.password ? (
+              <span style={{ color: "#d32f2f", fontSize: 13 }}>
+                 {errors.password.message}
+              </span>
+            ) : null
+          }
           sx={{ mb: 3 }}
           disabled={isSubmitting}
         />
@@ -116,7 +128,7 @@ export default function Login() {
           fullWidth
           variant="contained"
           onClick={handleSubmit(onSubmit)}
-          disabled={isSubmitting || !email || !password}
+          disabled={isSubmitting}
           sx={{
             mt: 2,
             background: "#3a5f23",

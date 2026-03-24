@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import {
   Box,
   TextField,
@@ -21,7 +21,38 @@ function SearchBar() {
   const [error, setError] = useState("");
   const [recipes, setRecipes] = useState([]);
   const navigate = useNavigate();
+  useEffect(() => {//load ingredient from session
+  const savedIngredients = sessionStorage.getItem("ingredients");
 
+  if (savedIngredients) {//restore from session
+    setIngredients(JSON.parse(savedIngredients));
+    }
+  }, []);
+
+  useEffect(() => {//load recipes
+    sessionStorage.setItem("ingredients", JSON.stringify(ingredients));
+  }, [ingredients]);
+  useEffect(() => {
+  const savedRecipes = sessionStorage.getItem("recipes");
+
+  if (savedRecipes) {
+    setRecipes(JSON.parse(savedRecipes));
+    }
+  }, []);
+  useEffect(() => {//save the recipe
+  sessionStorage.setItem("recipes", JSON.stringify(recipes));
+  }, [recipes]);
+  useEffect(() => {//clear on refresh
+  const handleBeforeUnload = () => {
+    sessionStorage.clear();
+  };
+
+  window.addEventListener("beforeunload", handleBeforeUnload);
+
+  return () => {
+    window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
   const remaining = MIN_REQUIRED - ingredients.length;
 
   const addIngredient = () => {
@@ -30,16 +61,16 @@ function SearchBar() {
     if (!value) return;
 
     // prevent duplicates
-    if (ingredients.includes(value)) {
+    if (ingredients.includes(value)) {//doesnt allow duplicate key
       setInput("");
       return;
     }
 
-    setIngredients([...ingredients, value]);
+    setIngredients([...ingredients, value]);//add new ingredient
     setInput("");
   };
 
-  const deleteIngredient = (itemToDelete) => {
+  const deleteIngredient = (itemToDelete) => {//delete ingredient
     setIngredients(ingredients.filter((item) => item !== itemToDelete));
   };
 
@@ -91,7 +122,7 @@ function SearchBar() {
           variant="standard"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyPress={(e) => e.key === "Enter" && addIngredient()}
+
           InputProps={{ disableUnderline: true }}
           sx={{
             ml: 2,
@@ -259,7 +290,7 @@ function SearchBar() {
         </Box>
       )}
 
-      {/* NO RECIPES FOUND MESSAGE */}
+      {/* NO RECIPES FOUND MESSAGE
       {!loading && recipes.length === 0 && ingredients.length >= MIN_REQUIRED && !error && (
         <Box
           sx={{
@@ -295,7 +326,7 @@ function SearchBar() {
             We couldn't find any recipes matching your ingredients.
           </Typography>
         </Box>
-      )}
+      )} */}
 
       {/* RECIPES DISPLAY */}
       {recipes.length > 0 && (

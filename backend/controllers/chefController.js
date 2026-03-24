@@ -2,15 +2,11 @@ const Recipe = require('../models/Recipe');
 const path = require('path');
 const fs = require('fs');
 
-/**
- * @desc    Add a new recipe
- * @route   POST /api/chef/recipes
- * @access  Chef
- */
-const addRecipe = async (req, res, next) => {
+
+const addRecipe = async (req, res, next) => {//controller for addrecipe
   try {
     const { title, ingredients, instructions, category, prepTime, cookTime, servings, isPublished } = req.body;
-
+    //extract field from request body
     // Parse ingredients if sent as JSON string
     let parsedIngredients = ingredients;
     if (typeof ingredients === 'string') {
@@ -21,15 +17,15 @@ const addRecipe = async (req, res, next) => {
       }
     }
 
-    const imageUrl = req.file
-      ? `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`
-      : null;
+    const imageUrl = req.file//check if file is uploaded
+      ? `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`//build full image URL
+      : null;//no file = null
 
-    const recipe = await Recipe.create({
+    const recipe = await Recipe.create({//create a recipe in DB
       title,
       ingredients: parsedIngredients,
       instructions,
-      image: imageUrl,
+      image: imageUrl,//save image URL
       chefName: req.user.name,
       chefId: req.user._id,
       category,
@@ -53,14 +49,9 @@ const addRecipe = async (req, res, next) => {
   }
 };
 
-/**
- * @desc    Edit own recipe
- * @route   PUT /api/chef/recipes/:id
- * @access  Chef (own recipes only)
- */
-const editRecipe = async (req, res, next) => {
+const editRecipe = async (req, res, next) => {//controller of edit recipe
   try {
-    const recipe = await Recipe.findById(req.params.id);
+    const recipe = await Recipe.findById(req.params.id);//find recipe by ID
 
     if (!recipe) {
       return res.status(404).json({ success: false, message: 'Recipe not found.' });
@@ -97,8 +88,8 @@ const editRecipe = async (req, res, next) => {
       imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
     }
 
-    const updates = {
-      ...(title && { title }),
+    const updates = {//build update object
+      ...(title && { title }),//include only if exist
       ...(parsedIngredients && { ingredients: parsedIngredients }),
       ...(instructions && { instructions }),
       ...(category !== undefined && { category }),
@@ -110,8 +101,8 @@ const editRecipe = async (req, res, next) => {
     };
 
     const updatedRecipe = await Recipe.findByIdAndUpdate(req.params.id, updates, {
-      new: true,
-      runValidators: true,
+      new: true,//return updated doc
+      runValidators: true,//Apply schema validation
     });
 
     res.status(200).json({
@@ -125,20 +116,16 @@ const editRecipe = async (req, res, next) => {
   }
 };
 
-/**
- * @desc    Delete own recipe
- * @route   DELETE /api/chef/recipes/:id
- * @access  Chef (own recipes only)
- */
-const deleteRecipe = async (req, res, next) => {
+
+const deleteRecipe = async (req, res, next) => {//controller to delete the recipe
   try {
-    const recipe = await Recipe.findById(req.params.id);
+    const recipe = await Recipe.findById(req.params.id);//find the recipe from the body
 
     if (!recipe) {
       return res.status(404).json({ success: false, message: 'Recipe not found.' });
     }
 
-    if (recipe.chefId.toString() !== req.user._id.toString()) {
+    if (recipe.chefId.toString() !== req.user._id.toString()) {//check for the ownership
       return res.status(403).json({
         success: false,
         message: 'You can only delete your own recipes.',
@@ -163,19 +150,15 @@ const deleteRecipe = async (req, res, next) => {
   }
 };
 
-/**
- * @desc    Get chef's own recipes
- * @route   GET /api/chef/my-recipes
- * @access  Chef
- */
-const getMyRecipes = async (req, res, next) => {
+
+const getMyRecipes = async (req, res, next) => {//controller to get the recipe owned by the chef
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
 
     const [recipes, total] = await Promise.all([
-      Recipe.find({ chefId: req.user._id })
+      Recipe.find({ chefId: req.user._id })//find the recipe from the URL
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit),

@@ -16,27 +16,27 @@ import { useAuth } from "../../context/AuthContext";
 import { authAPI } from "../../services/api";
 
 export default function AdminProfile() {
-  const { user, updateUser } = useAuth();
-  const [isEditing, setIsEditing] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const { user, updateUser } = useAuth();//current loggeddin user,updates global auth state
+  const [isEditing, setIsEditing] = useState(false);//toggle edit mode
+  const [loading, setLoading] = useState(false);//button loading state
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [success, setSuccess] = useState("");//error success message
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({//initialize form with current user data use optional chaining(?.) for crash
     name: user?.name || "",
     email: user?.email || "",
     bio: user?.bio || "",
   });
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target;//update only the changed field 
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
-  const handleSave = async () => {
+  const handleSave = async () => {//
     setError("");
     setSuccess("");
 
@@ -75,7 +75,7 @@ export default function AdminProfile() {
     }
   };
 
-  const handleCancel = () => {
+  const handleCancel = () => {//cancel editing reset to the original value
     setFormData({
       name: user?.name || "",
       email: user?.email || "",
@@ -85,7 +85,7 @@ export default function AdminProfile() {
     setError("");
   };
 
-  const getInitials = (name) => {
+  const getInitials = (name) => {//avatar initial generator
     return name
       ?.split(" ")
       .map((word) => word[0])

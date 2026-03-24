@@ -1,27 +1,31 @@
 import React from "react";
 import { AppBar, Toolbar, Box, Button, Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import logo from "../assets/chef.png"
 export default function Header() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { isAuthenticated, user } = useAuth();
 
-  const handleLogin = () => {
+  const handleLogin = () => {//handle login navigation
     navigate("/auth/login");
   };
 
-  const handleSignup = () => {
+  const handleSignup = () => {//handle signup navigation
     navigate("/auth/signup");
   };
 
-  const handleDashboard = () => {
+  const handleDashboard = () => {//handle dashboard role wised
     if (user?.role === "admin") {
       navigate("/admin/dashboard");
     } else if (user?.role === "chef") {
       navigate("/chef/dashboard");
     }
   };
+  const handleHome = () => {//handle hoem
+    navigate("/");
+  }
 
   return (
     <AppBar
@@ -84,6 +88,7 @@ export default function Header() {
                 backgroundColor: "#d9d6f5",
               },
             }}
+            onClick={handleHome}
           >
             Home
           </Button>

@@ -1,12 +1,12 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 
-const AuthContext = createContext();
+const AuthContext = createContext();//creates context object which hold auth data (user,token,etc)
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+export const AuthProvider = ({ children }) => {//wrap entire app 
+  const [user, setUser] = useState(null);//stored logged in user data
+  const [token, setToken] = useState(null);//stores JWT token
+  const [loading, setLoading] = useState(true);//indicates initial loading states
+  const [error, setError] = useState(null);//stroes auth related error
 
   // Load user from localStorage on mount
   useEffect(() => {

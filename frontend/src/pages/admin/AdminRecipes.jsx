@@ -29,23 +29,23 @@ import { adminAPI } from "../../services/api";
 export default function AdminRecipes() {
   const { user } = useAuth();
   
-  const [recipes, setRecipes] = useState([]);
+  const [recipes, setRecipes] = useState([]);//store recipe list
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [deleteId, setDeleteId] = useState(null);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);//delete popup controll
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);//search + pagination
 
-  useEffect(() => {
+  useEffect(() => {//runs when page changes,search changes
     fetchRecipes();
   }, [page, search]);
 
   const fetchRecipes = async () => {
     try {
       setLoading(true);
-      const response = await adminAPI.getAllRecipes(page, 10, search);
+      const response = await adminAPI.getAllRecipes(page, 10, search);//fetch API from backend
       setRecipes(response.data.data.recipes || []);
       setTotalPages(response.data.data.pagination.pages || 1);
     } catch (err) {
@@ -55,12 +55,12 @@ export default function AdminRecipes() {
     }
   };
 
-  const handleDeleteClick = (id) => {
+  const handleDeleteClick = (id) => {//deleteing the recipe
     setDeleteId(id);
     setDeleteDialogOpen(true);
   };
 
-  const handleConfirmDelete = async () => {
+  const handleConfirmDelete = async () => {//delete the recipe in backend
     try {
       await adminAPI.deleteRecipe(deleteId);
       setRecipes(recipes.filter((r) => r._id !== deleteId));
@@ -71,7 +71,7 @@ export default function AdminRecipes() {
     }
   };
 
-  const handleSearchChange = (e) => {
+  const handleSearchChange = (e) => {//reset page when search
     setSearch(e.target.value);
     setPage(1);
   };
