@@ -16,7 +16,7 @@ export default function RecipeCard({ recipe, variant = 'grid', minimal = false }
   const navigate = useNavigate();
 
   // Handle both old and new recipe data structures
-  const recipeData = recipe || {};
+  const recipeData = recipe || {};//fallback if recipe is not defined
   const title = recipeData.title || 'Untitled Recipe';
   const image = recipeData.image;
   const chefName = recipeData.chefName || 'Anonymous Chef';
@@ -30,8 +30,8 @@ export default function RecipeCard({ recipe, variant = 'grid', minimal = false }
   const gradient = recipeData.gradient;
 
   const handleClick = () => {
-    if (recipeData._id) {
-      navigate(`/recipe/${recipeData._id}`);
+    if (recipeData._id) {//ensure valid recipe
+      navigate(`/recipe/${recipeData._id}`);//navigate to recipe detail page
     }
   };
 

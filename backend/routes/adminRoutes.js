@@ -1,10 +1,11 @@
 const express = require('express');
-const router = express.Router();
+const router = express.Router();//seperate routes manager for a specific feature/module
 const {
   getAllRecipes,
   deleteRecipe,
   getChefs,
   deleteChef,
+  toggleChefStatus,
   getDashboardStats,
 } = require('../controllers/adminController');
 const { protect, authorize } = require('../middleware/auth');
@@ -17,5 +18,6 @@ router.get('/recipes', getAllRecipes);
 router.delete('/recipes/:id', deleteRecipe);
 router.get('/chefs', getChefs);
 router.delete('/chefs/:id', deleteChef);
+router.patch('/chefs/:id/toggle-status', toggleChefStatus);
 
 module.exports = router;

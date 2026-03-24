@@ -21,22 +21,22 @@ import { useAuth } from "../../context/AuthContext";
 import { adminAPI } from "../../services/api";
 
 export default function AdminDashboard() {
-  const { user } = useAuth();
+  const { user } = useAuth();//get logged in user
   const [stats, setStats] = useState(null);
-  const [recentRecipes, setRecentRecipes] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [recentRecipes, setRecentRecipes] = useState([]);//stores latest recipe
+  const [loading, setLoading] = useState(true);//loadin states
   const [error, setError] = useState("");
 
-  useEffect(() => {
+  useEffect(() => {//runs only once when the page reload
     fetchDashboardData();
   }, []);
 
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = async () => {//fetxxh the dashboard data
     try {
       setLoading(true);
-      const response = await adminAPI.getDashboardStats();
+      const response = await adminAPI.getDashboardStats();//fetch data from backend
       console.log("Dashboard Stats Response:", response);
-      setStats(response.data.data);
+      setStats(response.data.data);//save stats
       
       // Fetch recent recipes too
       const recipesRes = await adminAPI.getAllRecipes(1, 5);

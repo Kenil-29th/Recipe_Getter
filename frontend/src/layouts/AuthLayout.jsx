@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import auth from "../assets/auth.jpg";
 
-export default function AuthLayout({ children }) {
+export default function AuthLayout({ children }) {//authentication layout like registraation and login page
   return (
     <Box sx={{ display: "flex", height: "100vh" }}>
       

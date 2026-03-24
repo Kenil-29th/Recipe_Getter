@@ -175,13 +175,24 @@ import logo from "../assets/chef.png";
 export default function Sidebar({ user }) {
 
   const navigate = useNavigate();
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(//state for sidebar collpsed or not stored in localstorage
+  () => localStorage.getItem('sidebarCollapsed') === 'true'
+);
 
-  const isAdmin = user?.role === "admin";
+// in the toggle handler:
+const toggle = () => {
+  const next = !isCollapsed;//flip the current state
+  setIsCollapsed(next);//update the current state into localstorage
+  localStorage.setItem('sidebarCollapsed', next);
+};
+
+
+  const isAdmin = user?.role === "admin";//role check
 
   const handleNavigation = (path) => {
     navigate(path);
   };
+  
 
   return (
     <Box
@@ -201,7 +212,7 @@ export default function Sidebar({ user }) {
 
       {/* Collapse Button */}
       <IconButton
-        onClick={() => setIsCollapsed(!isCollapsed)}
+        onClick={() => toggle()}
         sx={{
           position: "absolute",
           right: -12,

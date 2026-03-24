@@ -19,31 +19,31 @@ import {
   Pagination,
   Button,
 } from "@mui/material";
-import { Trash2, Search, AlertCircle, X } from "lucide-react";
+import { Trash2, Search, AlertCircle, X, ToggleLeft, ToggleRight } from "lucide-react";//icon used in Ui
 import Sidebar from "../../components/Sidebar";
 import ChefHeader from "../../components/ChefHeader";
 import { useAuth } from "../../context/AuthContext";
 import { adminAPI } from "../../services/api";
 
 export default function AdminChefs() {
-  const { user } = useAuth();
+  const { user } = useAuth();//gets the current logged-in user
   
-  const [chefs, setChefs] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [chefs, setChefs] = useState([]);//stores the list of chef
+  const [loading, setLoading] = useState(true);//track the loading state
   const [error, setError] = useState("");
   const [deleteId, setDeleteId] = useState(null);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [search, setSearch] = useState("");
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);//manage delete popup
+  const [search, setSearch] = useState("");//search input value
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);//pagination control
 
-  useEffect(() => {
-    const fetchChefs = async () => {
+  useEffect(() => {//runs when page or search chnages
+    const fetchChefs = async () => {//function to get the chef from backend
       try {
-        setLoading(true);
-        const response = await adminAPI.getChefs(page, 10, search);
-        setChefs(response.data.data.chefs || []);
-        setTotalPages(response.data.data.pagination.pages || 1);
+        setLoading(true);//show loading spinner
+        const response = await adminAPI.getChefs(page, 10, search);//API calling
+        setChefs(response.data.data.chefs || []);//save chef list
+        setTotalPages(response.data.data.pagination.pages || 1);//save total pages
       } catch (err) {
         setError(err.response?.data?.message || "Failed to fetch chefs");
       } finally {
@@ -54,15 +54,26 @@ export default function AdminChefs() {
     fetchChefs();
   }, [page, search]);
 
-  const handleDeleteClick = (id) => {
+  const handleToggleStatus = async (id, currentStatus) => {//toggle chef status
+    try {
+      await adminAPI.toggleChefStatus(id);//api call
+      setChefs(chefs.map((c) =>//update ui instantly
+        c._id === id ? { ...c, isActive: !currentStatus } : c
+      ));
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to update chef status");
+    }
+  };
+
+  const handleDeleteClick = (id) => {//open delete dialog
     setDeleteId(id);
     setDeleteDialogOpen(true);
   };
 
-  const handleConfirmDelete = async () => {
+  const handleConfirmDelete = async () => {//when user confirm delete
     try {
-      await adminAPI.deleteChef(deleteId);
-      setChefs(chefs.filter((c) => c._id !== deleteId));
+      await adminAPI.deleteChef(deleteId);//delete in backend
+      setChefs(chefs.filter((c) => c._id !== deleteId));//remove from ui
       setDeleteDialogOpen(false);
       setDeleteId(null);
     } catch (err) {
@@ -70,12 +81,12 @@ export default function AdminChefs() {
     }
   };
 
-  const handleSearchChange = (e) => {
+  const handleSearchChange = (e) => {//update the search
     setSearch(e.target.value);
     setPage(1);
   };
 
-  const handlePageChange = (event, value) => {
+  const handlePageChange = (event, value) => {//handle pagination
     setPage(value);
   };
 
@@ -142,6 +153,9 @@ export default function AdminChefs() {
                         Join Date
                       </TableCell>
                       <TableCell align="center" fontWeight="bold">
+                        Status
+                      </TableCell>
+                      <TableCell align="center" fontWeight="bold">
                         Actions
                       </TableCell>
                     </TableRow>
@@ -155,6 +169,24 @@ export default function AdminChefs() {
                         <TableCell align="center">{chef.recipeCount || 0}</TableCell>
                         <TableCell align="center">
                           {new Date(chef.createdAt).toLocaleDateString()}
+                        </TableCell>
+                        <TableCell align="center">
+                          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 0.5 }}>
+                            <IconButton
+                              size="small"
+                              onClick={() => handleToggleStatus(chef._id, chef.isActive)}
+                              sx={{
+                                color: chef.isActive ? "#16a34a" : "#9ca3af",
+                                "&:hover": { backgroundColor: chef.isActive ? "#dcfce7" : "#f3f4f6" }
+                              }}
+                              title={chef.isActive ? "Deactivate" : "Activate"}
+                            >
+                              {chef.isActive ? <ToggleRight size={22} /> : <ToggleLeft size={22} />}
+                            </IconButton>
+                            <Typography sx={{ fontSize: 12, color: chef.isActive ? "#16a34a" : "#9ca3af" }}>
+                              {chef.isActive ? "Active" : "Inactive"}
+                            </Typography>
+                          </Box>
                         </TableCell>
                         <TableCell align="center">
                           <IconButton

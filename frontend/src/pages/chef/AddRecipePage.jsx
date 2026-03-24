@@ -268,7 +268,7 @@ export default function AddRecipePage() {
                     placeholder="Type an ingredient..."
                     value={ingredientInput}
                     onChange={(e) => setIngredientInput(e.target.value)}
-                    onKeyPress={(e) => e.key === "Enter" && addIngredient()}
+
                     disabled={loading}
                   />
 

@@ -5,28 +5,28 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-export default function ChefHeader({ user }) {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const navigate = useNavigate();
-  const { logout } = useAuth();
+export default function ChefHeader({ user }) {//component and receive user as props
+  const [anchorEl, setAnchorEl] = useState(null);//state for menu anchor element anchorE1 determine where menu opens
+  const navigate = useNavigate();//function to change routes 
+  const { logout } = useAuth();//get logout function from context
 
-  const handleMenuOpen = (event) => {
+  const handleMenuOpen = (event) => {//function triggered on click
     setAnchorEl(event.currentTarget);
   };
 
   const handleMenuClose = () => {
-    setAnchorEl(null);
+    setAnchorEl(null);//removes anchor so menu closes
   };
 
-  const handleLogout = () => {
+  const handleLogout = () => {//clears user session
     logout();
-    navigate("/auth/login");
+    navigate("/auth/login");//redirect to login page
   };
 
   const handleProfileClick = () => {
-    handleMenuClose();
-    const profilePath = user?.role === "admin" ? "/admin/profile" : "/profile";
-    navigate(profilePath);
+    handleMenuClose();//close the menu first
+    const profilePath = user?.role === "admin" ? "/admin/profile" : "/profile";//check if user if yes that redirect to admin panel or redirect to profile
+    navigate(profilePath);//navigate to profile path
   };
 
   return (

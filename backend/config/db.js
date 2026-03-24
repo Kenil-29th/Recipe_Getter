@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-
+const mongoose = require('mongoose');//connect Node.js backend with mongdb
+//mongoose is the library that help to interact with mongodb easily
 const connectDB = async () => {
   try {
     const conn = await mongoose.connect(process.env.MONGO_URI);

@@ -30,7 +30,7 @@ export default function Signup() {
       confirmPassword: "",
       agreed: false,
     },
-    mode: "onBlur",
+    mode: "onChange",
   });
 
   const password = watch("password");
@@ -101,7 +101,13 @@ export default function Signup() {
             },
           })}
           error={!!errors.name}
-          helperText={errors.name?.message}
+          helperText={
+            errors.name ? (
+              <span style={{ color: "#d32f2f", fontSize: 13 }}>
+                 {errors.name.message}
+              </span>
+            ) : null
+          }
           sx={{ mb: 3 }}
           disabled={isSubmitting}
         />
@@ -120,7 +126,13 @@ export default function Signup() {
             },
           })}
           error={!!errors.email}
-          helperText={errors.email?.message}
+          helperText={
+            errors.email ? (
+              <span style={{ color: "#d32f2f", fontSize: 13 }}>
+                 {errors.email.message}
+              </span>
+            ) : null
+          }
           sx={{ mb: 3 }}
           disabled={isSubmitting}
         />
@@ -139,15 +151,12 @@ export default function Signup() {
           })}
           error={!!errors.password}
           helperText={
-            errors.password?.message || (
-              <span
-                style={{
-                  color:
-                    password && !isValidPassword(password)
-                      ? "#d32f2f"
-                      : "#2e7d32",
-                }}
-              >
+            errors.password ? (
+              <span style={{ color: "#d32f2f", fontSize: 13 }}>
+                 {errors.password.message}
+              </span>
+            ) : (
+              <span style={{ color: password && isValidPassword(password) ? "#2e7d32" : "#d32f2f", fontSize: 13 }}>
                 {getPasswordStrength(password)}
               </span>
             )
@@ -170,7 +179,13 @@ export default function Signup() {
               value === password || "Passwords do not match",
           })}
           error={!!errors.confirmPassword}
-          helperText={errors.confirmPassword?.message}
+          helperText={
+            errors.confirmPassword ? (
+              <span style={{ color: "#d32f2f", fontSize: 13 }}>
+                 {errors.confirmPassword.message}
+              </span>
+            ) : null
+          }
           sx={{ mb: 3 }}
           disabled={isSubmitting}
         />

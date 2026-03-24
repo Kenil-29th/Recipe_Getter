@@ -72,6 +72,7 @@ export const adminAPI = {
   getChefs: (page = 1, limit = 20, search = "") =>
     api.get("/admin/chefs", { params: { page, limit, search } }),
   deleteChef: (id) => api.delete(`/admin/chefs/${id}`),
+  toggleChefStatus: (id) => api.patch(`/admin/chefs/${id}/toggle-status`),
 };
 
 export default api;
