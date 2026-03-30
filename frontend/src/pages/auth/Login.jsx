@@ -59,7 +59,7 @@ export default function Login() {
 
   return (
     <AuthLayout>
-      <Box sx={{ width: 420 }}>
+      <Box sx={{ width: { xs: "100%", sm: 420 } }}>
         <Typography variant="h4" fontWeight="bold" mb={1}>
           Welcome back!
         </Typography>

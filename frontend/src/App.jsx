@@ -1,6 +1,12 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import { AuthProvider } from "./context/AuthContext";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+
+const theme = createTheme({
+  typography: {
+    fontFamily: "'Jost', sans-serif",
+  },
+});
 
 // Public pages
 import Login from "./pages/auth/Login";
@@ -22,7 +28,7 @@ import AdminProfile from "./pages/admin/AdminProfile";
 
 function App() {
   return (
-    <AuthProvider>
+    <ThemeProvider theme={theme}>
       <Routes>
         {/* PUBLIC ROUTES */}
         <Route path="/" element={<UserDashboard />} />
@@ -104,7 +110,7 @@ function App() {
         {/* 404 FALLBACK */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    </AuthProvider>
+    </ThemeProvider>
   );
 }
 

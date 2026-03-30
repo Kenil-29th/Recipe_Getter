@@ -269,9 +269,8 @@ const getDashboardStats = async (req, res, next) => {//controller for dashboard 
       ]),
     ]);
 
-    // Calculate average rating (using recipe count as a proxy since no rating field exists)
-    // If ratings are added later, replace with actual rating calculation
-    const avgRating = totalRecipes > 0 ? (4.5).toFixed(2) : 0;
+    // avgRating placeholder — replace with real aggregation if ratings are added
+    const avgRating = 0;
 
     res.status(200).json({
       success: true,
@@ -279,7 +278,7 @@ const getDashboardStats = async (req, res, next) => {//controller for dashboard 
         totalRecipes,
         totalChefs,
         activeUsers,
-        avgRating: parseFloat(avgRating),
+        avgRating,
         recentRecipes,
         topChefs,
         recipesByMonth,

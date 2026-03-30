@@ -31,6 +31,7 @@ export default function ChefDashboard() {
   const [error, setError] = useState("");
   const [deleteId, setDeleteId] = useState(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     fetchRecipes();
@@ -71,14 +72,14 @@ export default function ChefDashboard() {
   };
 
   return (
-    <Box sx={{ display: "flex", height: "100vh", backgroundColor: "#f5f5f5" }}>
-      <Sidebar user={user} />
+    <Box sx={{ display: "flex", minHeight: "100vh", height: { xs: "auto", md: "100vh" }, backgroundColor: "#f5f5f5" }}>
+      <Sidebar user={user} mobileOpen={mobileOpen} onMobileClose={() => setMobileOpen(false)} />
 
-      <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
-        <ChefHeader user={user} />
+      <Box sx={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
+        <ChefHeader user={user} onMenuClick={() => setMobileOpen(true)} />
 
         <Container maxWidth="lg" sx={{ py: 4, flex: 1, overflowY: "auto" }}>
-          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3, flexWrap: "wrap", gap: 2 }}>
             <Typography variant="h5" fontWeight="bold">
               My Recipes
             </Typography>

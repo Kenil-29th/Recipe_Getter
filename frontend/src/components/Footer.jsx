@@ -40,7 +40,7 @@ export default function Footer() {
         <Grid container spacing={4} alignItems="flex-start">
           
           {/* LEFT SIDE — BRAND */}
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
 
   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
     <img 
@@ -78,9 +78,7 @@ export default function Footer() {
 
           {/* RIGHT SIDE — COMPANY (pushed to right) */}
           <Grid
-            item
-            xs={12}
-            md={6}
+            size={{ xs: 12, md: 6 }}
             sx={{
               display: "flex",
               justifyContent: { md: "flex-end" },

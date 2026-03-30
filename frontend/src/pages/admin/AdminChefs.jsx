@@ -28,14 +28,15 @@ import { adminAPI } from "../../services/api";
 export default function AdminChefs() {
   const { user } = useAuth();//gets the current logged-in user
   
-  const [chefs, setChefs] = useState([]);//stores the list of chef
-  const [loading, setLoading] = useState(true);//track the loading state
+  const [chefs, setChefs] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [deleteId, setDeleteId] = useState(null);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);//manage delete popup
-  const [search, setSearch] = useState("");//search input value
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);//pagination control
+  const [totalPages, setTotalPages] = useState(1);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {//runs when page or search chnages
     const fetchChefs = async () => {//function to get the chef from backend
@@ -91,12 +92,10 @@ export default function AdminChefs() {
   };
 
   return (
-    <Box sx={{ display: "flex", height: "100vh", backgroundColor: "#f5f5f5" }}>
-      <Sidebar user={user} />
-
-      <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
-        <ChefHeader user={user} />
-
+    <Box sx={{ display: "flex", minHeight: "100vh", height: { xs: "auto", md: "100vh" }, backgroundColor: "#f5f5f5" }}>
+      <Sidebar user={user} mobileOpen={mobileOpen} onMobileClose={() => setMobileOpen(false)} />
+      <Box sx={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
+        <ChefHeader user={user} onMenuClick={() => setMobileOpen(true)} />
         <Container maxWidth="lg" sx={{ py: 4, flex: 1, overflowY: "auto" }}>
           <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
             <Typography variant="h5" fontWeight="bold">

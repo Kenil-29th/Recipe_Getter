@@ -40,6 +40,7 @@ export default function AddRecipePage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [initialLoading, setInitialLoading] = useState(isEditing);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   // Cleanup preview URL on unmount
   useEffect(() => {
@@ -177,11 +178,10 @@ export default function AddRecipePage() {
     : title && ingredients.length >= 1 && instructions && imageFile;
 
   return (
-    <Box sx={{ display: "flex", height: "100vh", backgroundColor: "#f5f5f5" }}>
-      <Sidebar user={user} />
-
-      <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
-        <ChefHeader user={user} />
+    <Box sx={{ display: "flex", minHeight: "100vh", height: { xs: "auto", md: "100vh" }, backgroundColor: "#f5f5f5" }}>
+      <Sidebar user={user} mobileOpen={mobileOpen} onMobileClose={() => setMobileOpen(false)} />
+      <Box sx={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
+        <ChefHeader user={user} onMenuClick={() => setMobileOpen(true)} />
 
         <Box sx={{ flex: 1, overflow: "auto", p: 4 }}>
           {initialLoading ? (
@@ -195,6 +195,9 @@ export default function AddRecipePage() {
             sx={{
               display: "flex",
               justifyContent: "space-between",
+              alignItems: { xs: "flex-start", sm: "center" },
+              flexDirection: { xs: "column", sm: "row" },
+              gap: 2,
               mb: 4,
             }}
           >

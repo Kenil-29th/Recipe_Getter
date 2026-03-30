@@ -23,9 +23,10 @@ import { adminAPI } from "../../services/api";
 export default function AdminDashboard() {
   const { user } = useAuth();//get logged in user
   const [stats, setStats] = useState(null);
-  const [recentRecipes, setRecentRecipes] = useState([]);//stores latest recipe
-  const [loading, setLoading] = useState(true);//loadin states
+  const [recentRecipes, setRecentRecipes] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {//runs only once when the page reload
     fetchDashboardData();
@@ -52,9 +53,9 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <Box sx={{ display: "flex", height: "100vh", backgroundColor: "#f5f5f5" }}>
-        <Sidebar user={user} />
-        <Box sx={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center" }}>
+      <Box sx={{ display: "flex", minHeight: "100vh", backgroundColor: "#f5f5f5" }}>
+        <Sidebar user={user} mobileOpen={mobileOpen} onMobileClose={() => setMobileOpen(false)} />
+        <Box sx={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center", minWidth: 0 }}>
           <CircularProgress />
         </Box>
       </Box>
@@ -72,12 +73,10 @@ export default function AdminDashboard() {
   console.log("Stat Items to Display:", statItems);
 
   return (
-    <Box sx={{ display: "flex", height: "100vh", backgroundColor: "#f5f5f5" }}>
-      <Sidebar user={user} />
-
-      <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
-        <ChefHeader user={user} />
-
+    <Box sx={{ display: "flex", minHeight: "100vh", height: { xs: "auto", md: "100vh" }, backgroundColor: "#f5f5f5" }}>
+      <Sidebar user={user} mobileOpen={mobileOpen} onMobileClose={() => setMobileOpen(false)} />
+      <Box sx={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
+        <ChefHeader user={user} onMenuClick={() => setMobileOpen(true)} />
         <Container maxWidth="lg" sx={{ py: 4, flex: 1, overflowY: "auto" }}>
           <Typography variant="h5" fontWeight="bold" sx={{ mb: 3 }}>
             Dashboard

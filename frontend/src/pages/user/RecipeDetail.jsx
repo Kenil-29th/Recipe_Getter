@@ -83,24 +83,24 @@ export default function RecipeDetail() {
       <Box sx={{ position: 'relative', zIndex: 3 }}>
         <Header />
         
-        <Box sx={{ flex: 1, display: "flex", justifyContent: "center", p: 3 }}>
+        <Box sx={{ flex: 1, display: "flex", justifyContent: "center", p: { xs: 2, sm: 3 } }}>
           <Box
             sx={{
               width: "100%",
               maxWidth: 1200,
-              backgroundColor: 'rgba(255, 255, 255, 0.95)',
-              backdropFilter: 'blur(10px)',
+              backgroundColor: "rgba(255, 255, 255, 0.95)",
+              backdropFilter: "blur(10px)",
               borderRadius: "20px",
-              p: 4,
+              p: { xs: 2, sm: 4 },
               boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
-              border: '1px solid rgba(255, 255, 255, 0.2)',
+              border: "1px solid rgba(255, 255, 255, 0.2)",
             }}
           >
             {/* TITLE */}
             <Typography
               sx={{
                 fontFamily: '"Playfair Display", serif',
-                fontSize: 42,
+                fontSize: { xs: 26, sm: 36, md: 42 },
                 fontWeight: "bold",
                 mb: 1,
               }}
@@ -151,7 +151,7 @@ export default function RecipeDetail() {
                 alt={recipe.title}
                 sx={{
                   width: "100%",
-                  height: 400,
+                  height: { xs: 220, sm: 320, md: 400 },
                   objectFit: "cover",
                   borderRadius: "18px",
                   mb: 4,

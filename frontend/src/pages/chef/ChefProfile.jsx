@@ -21,6 +21,7 @@ export default function ChefProfile() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const [formData, setFormData] = useState({
     name: user?.name || "",
@@ -94,11 +95,10 @@ export default function ChefProfile() {
   };
 
   return (
-    <Box sx={{ display: "flex", height: "100vh", backgroundColor: "#f5f5f5" }}>
-      <Sidebar user={user} />
-
-      <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
-        <ChefHeader user={user} />
+    <Box sx={{ display: "flex", minHeight: "100vh", height: { xs: "auto", md: "100vh" }, backgroundColor: "#f5f5f5" }}>
+      <Sidebar user={user} mobileOpen={mobileOpen} onMobileClose={() => setMobileOpen(false)} />
+      <Box sx={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
+        <ChefHeader user={user} onMenuClick={() => setMobileOpen(true)} />
 
         <Box sx={{ flex: 1, overflowY: "auto", py: 4, px: 3 }}>
           <Box sx={{ maxWidth: 1200, mx: "auto" }}>

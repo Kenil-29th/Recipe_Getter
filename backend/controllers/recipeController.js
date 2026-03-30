@@ -15,8 +15,8 @@ const suggestRecipes = async (req, res, next) => {//controller to suggest recipe
     // Normalize user ingredients to lowercase & trimmed
     const userIngredients = ingredients.map((i) => i.toLowerCase().trim());//convert all ingredient to lowercase also trim the with spaces
 
-    // Fetch all published recipes
-    const allRecipes = await Recipe.find({ isPublished: true });
+    // Fetch all published recipes (capped to prevent memory issues at scale)
+    const allRecipes = await Recipe.find({ isPublished: true }).limit(500);
 
     const scoredRecipes = allRecipes//start processing the recipe
       .map((recipe) => {//loop through each recipe
@@ -37,26 +37,21 @@ const suggestRecipes = async (req, res, next) => {//controller to suggest recipe
         return { recipe, matchedCount, extraCount };
       })
       .filter(({ matchedCount, extraCount, recipe }) => {
-        const totalUserIngredients = userIngredients.length;
         const recipeIngredientCount = recipe.ingredients.length;
-
-        // Recipe must match most of the user's ingredients (more than half)
-        const matchesMost = matchedCount >= Math.ceil(totalUserIngredients * 0.5);
-
-        // Recipe can have at most 2 extra ingredients beyond what user has
-        const withinExtraLimit = extraCount <= 2;
 
         // At least 1 ingredient must match
         const hasAnyMatch = matchedCount > 0;
 
-        // Avoid suggesting recipes where user barely covers any of the recipe's needs
-        // (i.e., the match rate relative to the recipe's own ingredients is reasonable)
+        // Recipe can have at most 5 extra ingredients the user doesn't have
+        const withinExtraLimit = extraCount <= 5;
+
+        // At least 70% of the recipe's ingredients must be covered by the user
         const recipeCoverage = recipeIngredientCount > 0
           ? matchedCount / recipeIngredientCount
           : 0;
-        const hasReasonableCoverage = recipeCoverage >= 0.5;
+        const hasReasonableCoverage = recipeCoverage >= 0.7;
 
-        return hasAnyMatch && matchesMost && withinExtraLimit && hasReasonableCoverage;
+        return hasAnyMatch && withinExtraLimit && hasReasonableCoverage;
       })
       .sort((a, b) => {
         // Primary: most matched ingredients first

@@ -7,19 +7,19 @@ import {
   Typography,
   CircularProgress,
   Alert,
+  Chip,
 } from "@mui/material";
-import Chip from "@mui/joy/Chip";
-import ChipDelete from "@mui/joy/ChipDelete";
 import { useNavigate } from "react-router-dom";
 import { recipeAPI } from "../services/api";
 
 function SearchBar() {
-  const MIN_REQUIRED = 4;
+  const MIN_REQUIRED = 1;
   const [input, setInput] = useState("");
   const [ingredients, setIngredients] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [recipes, setRecipes] = useState([]);
+  const [searched, setSearched] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {//load ingredient from session
   const savedIngredients = sessionStorage.getItem("ingredients");
@@ -61,13 +61,20 @@ function SearchBar() {
     if (!value) return;
 
     // prevent duplicates
-    if (ingredients.includes(value)) {//doesnt allow duplicate key
+    if (ingredients.includes(value)) {
       setInput("");
       return;
     }
 
-    setIngredients([...ingredients, value]);//add new ingredient
+    setIngredients([...ingredients, value]);
     setInput("");
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      addIngredient();
+    }
   };
 
   const deleteIngredient = (itemToDelete) => {//delete ingredient
@@ -77,6 +84,7 @@ function SearchBar() {
   const handleGetRecipe = async () => {
     setLoading(true);
     setError("");
+    setSearched(false);
     try {
       const response = await recipeAPI.suggestRecipes(ingredients);
       setRecipes(response.data.data.recipes || []);
@@ -85,6 +93,7 @@ function SearchBar() {
       setRecipes([]);
     } finally {
       setLoading(false);
+      setSearched(true);
     }
   };
 
@@ -122,13 +131,13 @@ function SearchBar() {
           variant="standard"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-
+          onKeyDown={handleKeyDown}
           InputProps={{ disableUnderline: true }}
           sx={{
             ml: 2,
             "& input": {
               py: 1.5,
-              fontSize: 16,
+              fontSize: { xs: 14, sm: 16 },
             },
           }}
           disabled={loading}
@@ -142,11 +151,10 @@ function SearchBar() {
             backgroundColor: "#2d4a1c",
             borderRadius: "30px",
             textTransform: "none",
-            px: 4,
+            px: { xs: 2, sm: 4 },
             py: 1,
-            "&:hover": {
-              backgroundColor: "#000",
-            },
+            whiteSpace: "nowrap",
+            "&:hover": { backgroundColor: "#000" },
           }}
         >
           Add
@@ -192,25 +200,32 @@ function SearchBar() {
 
       {/* CHIP LIST */}
       <Stack
-        direction="column"
+        direction="row"
         spacing={1}
+        flexWrap="wrap"
         sx={{
           mt: 3,
           width: "90%",
           maxWidth: "700px",
+          gap: 1,
         }}
       >
         {ingredients.map((item, index) => (
           <Chip
             key={index}
-            variant="soft"
-            color="neutral"
-            endDecorator={
-              <ChipDelete onDelete={() => deleteIngredient(item)} />
-            }
-          >
-            {item}
-          </Chip>
+            label={item}
+            onDelete={() => deleteIngredient(item)}
+            sx={{
+              backgroundColor: "#fff",
+              color: "#1a1a1a",
+              fontFamily: "'Jost', sans-serif",
+              "& .MuiChip-label": { color: "#1a1a1a" },
+              "& .MuiChip-deleteIcon": {
+                color: "rgba(0,0,0,0.6)",
+                "&:hover": { color: "#000" },
+              },
+            }}
+          />
         ))}
       </Stack>
 
@@ -246,9 +261,9 @@ function SearchBar() {
             borderRadius: "16px",
             p: 3,
             display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
             justifyContent: "space-between",
-            alignItems: "center",
-            flexWrap: "wrap",
+            alignItems: { xs: "stretch", sm: "center" },
             gap: 2,
             boxShadow: "0 8px 24px rgba(0,0,0,0.3)",
             border: "1px solid rgba(255, 255, 255, 0.3)",
@@ -290,8 +305,8 @@ function SearchBar() {
         </Box>
       )}
 
-      {/* NO RECIPES FOUND MESSAGE
-      {!loading && recipes.length === 0 && ingredients.length >= MIN_REQUIRED && !error && (
+      {/* NO RECIPES FOUND MESSAGE */}
+      {!loading && searched && recipes.length === 0 && ingredients.length >= MIN_REQUIRED && !error && (
         <Box
           sx={{
             mt: 4,
@@ -323,10 +338,10 @@ function SearchBar() {
               mb: 2,
             }}
           >
-            We couldn't find any recipes matching your ingredients.
+            We couldn't find any recipes matching your ingredients. Try adding more or different ingredients.
           </Typography>
         </Box>
-      )} */}
+      )}
 
       {/* RECIPES DISPLAY */}
       {recipes.length > 0 && (
@@ -347,7 +362,7 @@ function SearchBar() {
           <Box
             sx={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+              gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)", md: "repeat(auto-fill, minmax(250px, 1fr))" },
               gap: 3,
               mb: 3,
             }}

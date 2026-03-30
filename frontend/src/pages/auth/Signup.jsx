@@ -77,7 +77,7 @@ export default function Signup() {
 
   return (
     <AuthLayout>
-      <Box sx={{ width: 420 }}>
+      <Box sx={{ width: { xs: "100%", sm: 420 } }}>
         <Typography variant="h4" fontWeight="bold" mb={4}>
           Get Started Now
         </Typography>
