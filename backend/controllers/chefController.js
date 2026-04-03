@@ -17,9 +17,9 @@ const addRecipe = async (req, res, next) => {//controller for addrecipe
       }
     }
 
-    const imageUrl = req.file//check if file is uploaded
-      ? `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`//build full image URL
-      : null;//no file = null
+    const imageUrl = req.file
+      ? `${process.env.BASE_URL || `${req.protocol}://${req.get('host')}`}/uploads/${req.file.filename}`
+      : null;
 
     const recipe = await Recipe.create({//create a recipe in DB
       title,
@@ -85,7 +85,7 @@ const editRecipe = async (req, res, next) => {//controller of edit recipe
         const oldPath = path.join(__dirname, '..', 'uploads', oldFilename);
         fs.unlink(oldPath, () => {}); // non-blocking
       }
-      imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+      imageUrl = `${process.env.BASE_URL || `${req.protocol}://${req.get('host')}`}/uploads/${req.file.filename}`;
     }
 
     const updates = {//build update object

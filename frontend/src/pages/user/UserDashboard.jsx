@@ -249,7 +249,7 @@ const UserDashboard = () => {
           )} */}
 
           {/* Empty state */}
-          {/* {suggestedRecipes.length === 0 && !error && (
+          {suggestedRecipes.length === 0 && !error && (
             <Box 
               sx={{ 
                 textAlign: 'center', 
@@ -279,7 +279,7 @@ const UserDashboard = () => {
                 Start by adding ingredients above to discover delicious recipes
               </Typography>
             </Box>
-          )} */}
+          )}
         </Container>
 
         <Footer />

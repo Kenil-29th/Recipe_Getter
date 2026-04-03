@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { recipeAPI } from "../services/api";
 
 function SearchBar() {
-  const MIN_REQUIRED = 1;
+  const MIN_REQUIRED = 4;
   const [input, setInput] = useState("");
   const [ingredients, setIngredients] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -70,12 +70,12 @@ function SearchBar() {
     setInput("");
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      addIngredient();
-    }
-  };
+  // const handleKeyDown = (e) => {
+  //   if (e.key === "Enter") {
+  //     e.preventDefault();
+  //     addIngredient();
+  //   }
+  // };
 
   const deleteIngredient = (itemToDelete) => {//delete ingredient
     setIngredients(ingredients.filter((item) => item !== itemToDelete));
@@ -131,8 +131,8 @@ function SearchBar() {
           variant="standard"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          InputProps={{ disableUnderline: true }}
+          // onKeyDown={handleKeyDown}
+          slotProps={{ input: { disableUnderline: true } }}
           sx={{
             ml: 2,
             "& input": {
@@ -161,29 +161,7 @@ function SearchBar() {
         </Button>
       </Box>
 
-      {/* VALIDATION MESSAGE
-      {ingredients.length < MIN_REQUIRED && ingredients.length > 0 && (
-  <Typography
-    sx={{
-      mt: 1.5,
-      color: "#ffffff",
-      backgroundColor: "rgba(58, 95, 35, 0.8)",
-      backdropFilter: "blur(10px)",
-      fontSize: 14,
-      fontWeight: 600,
-      width: "90%",
-      maxWidth: "700px",
-      textAlign: "center",
-      px: 3,
-      py: 1.5,
-      borderRadius: 3,
-      boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-    }}
-  >
-    Add at least {remaining} more ingredient{remaining > 1 && "s"} to continue
-  </Typography>
-)} */}
-            {/* VALIDATION MESSAGE */}
+      {/* VALIDATION MESSAGE */}
         {ingredients.length < MIN_REQUIRED && ingredients.length > 0 && (
           <Typography
             sx={{

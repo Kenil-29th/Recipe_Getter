@@ -66,7 +66,8 @@ export default function Signup() {
       const { token, user } = response.data.data;
 
       signup(user, token);
-      navigate("/chef/dashboard");
+      if (user.role === "admin") navigate("/admin/dashboard");
+      else navigate("/chef/dashboard");
     } catch (err) {
       setError("root", {
         message:

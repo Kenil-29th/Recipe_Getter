@@ -44,6 +44,7 @@ const RecipeSearch = () => {
 
   useEffect(() => {
     fetchRecipes();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery, category, sortBy, page]);
 
   const fetchRecipes = async () => {
@@ -114,8 +115,7 @@ const RecipeSearch = () => {
     }
   };
 
-  const handleSearch = (e) => {
-    e.preventDefault();
+  const handleSearch = () => {
     setPage(1);
   };
 
@@ -189,12 +189,14 @@ const RecipeSearch = () => {
               placeholder="Search by ingredients..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
+              slotProps={{
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon />
+                    </InputAdornment>
+                  ),
+                },
               }}
               sx={{
                 backgroundColor: 'white',
