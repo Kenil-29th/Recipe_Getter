@@ -61,7 +61,7 @@ const UserDashboard = () => {
           backgroundColor: 'rgba(255, 255, 255, 1)',
         },
       }}
-      onClick={() => navigate(`/recipe/${recipe._id}`)}
+      onClick={() => navigate(`/recipe/${recipe.slug}`)}
     >
       {recipe.image && (
         <CardMedia

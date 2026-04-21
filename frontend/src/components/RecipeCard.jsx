@@ -30,8 +30,8 @@ export default function RecipeCard({ recipe, variant = 'grid', minimal = false }
   const gradient = recipeData.gradient;
 
   const handleClick = () => {
-    if (recipeData._id) {//ensure valid recipe
-      navigate(`/recipe/${recipeData._id}`);//navigate to recipe detail page
+    if (recipeData.slug) {//ensure valid recipe
+      navigate(`/recipe/${recipeData.slug}`);//navigate to recipe detail page
     }
   };
 
@@ -45,10 +45,10 @@ export default function RecipeCard({ recipe, variant = 'grid', minimal = false }
           gap: 2,
           p: 1.5,
           backgroundColor: '#fff',
-          cursor: recipeData._id ? 'pointer' : 'default',
+          cursor: recipeData.slug ? 'pointer' : 'default',
           transition: 'all 0.2s',
           '&:hover': {
-            backgroundColor: recipeData._id ? '#f9f9f9' : 'transparent',
+            backgroundColor: recipeData.slug ? '#f9f9f9' : 'transparent',
           },
         }}
       >
@@ -88,11 +88,11 @@ export default function RecipeCard({ recipe, variant = 'grid', minimal = false }
           p: 2,
           backgroundColor: '#fff',
           borderRadius: 1,
-          cursor: recipeData._id ? 'pointer' : 'default',
+          cursor: recipeData.slug ? 'pointer' : 'default',
           transition: 'all 0.2s',
           '&:hover': {
-            backgroundColor: recipeData._id ? '#f9f9f9' : 'transparent',
-            boxShadow: recipeData._id ? '0 4px 12px rgba(0,0,0,0.1)' : 'none',
+            backgroundColor: recipeData.slug ? '#f9f9f9' : 'transparent',
+            boxShadow: recipeData.slug ? '0 4px 12px rgba(0,0,0,0.1)' : 'none',
           },
         }}
       >
@@ -127,7 +127,7 @@ export default function RecipeCard({ recipe, variant = 'grid', minimal = false }
   }
 
   // Grid variant - main display (new API data)
-  if (recipeData._id) {
+  if (recipeData.slug) {
     return (
       <Card
         onClick={handleClick}

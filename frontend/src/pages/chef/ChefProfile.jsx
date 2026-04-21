@@ -10,6 +10,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { Edit, Save, X, Calendar } from "lucide-react";
+import { toast } from "react-toastify";
 import Sidebar from "../../components/Sidebar";
 import ChefHeader from "../../components/ChefHeader";
 import { useAuth } from "../../context/AuthContext";
@@ -64,6 +65,7 @@ export default function ChefProfile() {
       // Update local state with new user data
       updateUser(response.data.data.user);
 
+      toast.success("Profile updated successfully!");
       setSuccess("Profile updated successfully");
       setIsEditing(false);
 

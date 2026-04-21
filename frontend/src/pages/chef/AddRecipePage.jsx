@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { Upload, Plus, X, CheckCircle, Image as ImageIcon } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import Sidebar from "../../components/Sidebar";
 import ChefHeader from "../../components/ChefHeader";
 import { useAuth } from "../../context/AuthContext";
@@ -21,9 +22,10 @@ import { chefAPI, recipeAPI } from "../../services/api";
 export default function AddRecipePage() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { id } = useParams();
-  const isEditing = !!id;
+  const { slug } = useParams();
+  const isEditing = !!slug;
   
+  const [recipeId, setRecipeId] = useState(null); // actual _id for API calls
   const [title, setTitle] = useState("");
   const [ingredientInput, setIngredientInput] = useState("");
   const [ingredients, setIngredients] = useState([]);
@@ -56,14 +58,15 @@ export default function AddRecipePage() {
     if (isEditing) {
       loadRecipe();
     }
-  }, [id]);
+  }, [slug]);
 
   const loadRecipe = async () => {
     try {
       setInitialLoading(true);
-      const response = await recipeAPI.getRecipeById(id);
+      const response = await recipeAPI.getRecipeById(slug);
       const recipe = response.data.data.recipe;
       
+      setRecipeId(recipe._id); // store the real _id for edit/update calls
       setTitle(recipe.title || "");
       setIngredients(recipe.ingredients || []);
       setInstructions(recipe.instructions || "");
@@ -160,13 +163,16 @@ export default function AddRecipePage() {
       }
 
       if (isEditing) {
-        await chefAPI.editRecipe(id, formData);
+        await chefAPI.editRecipe(recipeId, formData);
+        toast.success("Recipe updated successfully!");
       } else {
         await chefAPI.addRecipe(formData);
+        toast.success("Recipe published successfully!");
       }
       
       navigate("/chef/dashboard");
     } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to publish recipe. Please try again.");
       setError(err.response?.data?.message || "Failed to publish recipe");
     } finally {
       setLoading(false);
@@ -251,7 +257,7 @@ export default function AddRecipePage() {
                 />
 
                 <Typography mb={1}>
-                  Ingredients (minimum 1)
+                  Ingredients (minimum 4)
                 </Typography>
 
                 <Stack direction="row" spacing={1} flexWrap="wrap" mb={2}>

@@ -17,7 +17,7 @@ import Footer from "../../components/Footer";
 import { recipeAPI } from "../../services/api";
 
 export default function RecipeDetail() {
-  const { id } = useParams();
+  const { slug } = useParams();
   const [recipe, setRecipe] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -25,14 +25,14 @@ export default function RecipeDetail() {
   const fetchRecipe = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await recipeAPI.getRecipeById(id);
+      const response = await recipeAPI.getRecipeById(slug);
       setRecipe(response.data.data.recipe);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to load recipe");
     } finally {
       setLoading(false);
     }
-  }, [id]);
+  }, [slug]);
 
   useEffect(() => {
     fetchRecipe();

@@ -8,6 +8,11 @@ const recipeSchema = new mongoose.Schema(
       trim: true,
       maxlength: [200, 'Title cannot exceed 200 characters'],
     },
+    slug: {
+      type: String,
+      unique: true,
+      index: true,
+    },
     ingredients: {
       type: [String],
       required: [true, 'Ingredients are required'],
@@ -57,6 +62,39 @@ const recipeSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
+
+// Generate slug from title before saving
+recipeSchema.pre('save', async function () {
+  if (!this.isModified('title')) return;
+  let baseSlug = this.title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+  let slug = baseSlug;
+  let count = 1;
+  while (await mongoose.model('Recipe').findOne({ slug, _id: { $ne: this._id } })) {
+    slug = `${baseSlug}-${count++}`;
+  }
+  this.slug = slug;
+});
+
+// Also generate slug for findOneAndUpdate operations
+recipeSchema.pre('findOneAndUpdate', async function () {
+  const update = this.getUpdate();
+  if (update.title) {
+    const docId = this.getQuery()._id;
+    let baseSlug = update.title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+    let slug = baseSlug;
+    let count = 1;
+    while (await mongoose.model('Recipe').findOne({ slug, _id: { $ne: docId } })) {
+      slug = `${baseSlug}-${count++}`;
+    }
+    this.setUpdate({ ...update, slug });
+  }
+});
 
 // Index for faster ingredient matching queries
 recipeSchema.index({ ingredients: 1 });

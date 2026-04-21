@@ -348,7 +348,7 @@ function SearchBar() {
             {recipes.map((recipe) => (
               <Box
                 key={recipe._id}
-                onClick={() => navigate(`/recipe/${recipe._id}`)}
+                onClick={() => navigate(`/recipe/${recipe.slug}`)}
                 sx={{
                   backgroundColor: "rgba(255, 255, 255, 0.95)",
                   backdropFilter: "blur(10px)",

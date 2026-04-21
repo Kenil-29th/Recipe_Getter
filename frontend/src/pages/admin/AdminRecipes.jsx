@@ -20,7 +20,10 @@ import {
   Button,
 } from "@mui/material";
 import { Trash2, Search, CheckCircle, Clock, AlertCircle, X } from "lucide-react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import Sidebar from "../../components/Sidebar";
 import ChefHeader from "../../components/ChefHeader";
 import { useAuth } from "../../context/AuthContext";
@@ -33,6 +36,7 @@ export default function AdminRecipes() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [deleteId, setDeleteId] = useState(null);
+  const [deleteName, setDeleteName] = useState("");
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -56,8 +60,9 @@ export default function AdminRecipes() {
     }
   };
 
-  const handleDeleteClick = (id) => {//deleteing the recipe
+  const handleDeleteClick = (id, title) => {//deleteing the recipe
     setDeleteId(id);
+    setDeleteName(title);
     setDeleteDialogOpen(true);
   };
 
@@ -67,8 +72,9 @@ export default function AdminRecipes() {
       setRecipes(recipes.filter((r) => r._id !== deleteId));
       setDeleteDialogOpen(false);
       setDeleteId(null);
+      toast.success("Recipe deleted successfully!");
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to delete recipe");
+      toast.error(err.response?.data?.message || "Failed to delete. Please try again.");
     }
   };
 
@@ -181,7 +187,7 @@ export default function AdminRecipes() {
                         <TableCell align="center">
                           <IconButton
                             size="small"
-                            onClick={() => handleDeleteClick(recipe._id)}
+                            onClick={() => handleDeleteClick(recipe._id, recipe.title)}
                             sx={{ 
                               color: "#dc2626",
                               "&:hover": { backgroundColor: "#fee2e2" }
@@ -210,31 +216,57 @@ export default function AdminRecipes() {
         </Container>
       </Box>
 
-      <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
-        <Box sx={{ p: 3, minWidth: 300 }}>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
-            <AlertCircle size={24} color="#dc2626" />
-            <Typography fontWeight="bold">
-              Delete Recipe?
-            </Typography>
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+        PaperProps={{
+          sx: { borderRadius: "20px", p: 1, maxWidth: 420 },
+        }}
+      >
+        <Box sx={{ p: 3 }}>
+          <Box sx={{ fontSize: 48, mb: 2 }}>
+            <FontAwesomeIcon icon={faTrashCan} shake style={{ color: "#555" }} />
           </Box>
-          <Typography color="text.secondary" mb={3}>
-            This action cannot be undone.
+          <Typography sx={{ fontSize: 22, fontWeight: 700, color: "#1a1a1a", mb: 1.5 }}>
+            Delete Recipe?
+          </Typography>
+          <Typography sx={{ color: "#666", fontSize: 15, lineHeight: 1.6, mb: 3 }}>
+            Are you sure you want to delete "<span style={{ fontWeight: 700, color: "#1a1a1a" }}>{deleteName}</span>"?
+            This action cannot be undone and will also remove the uploaded image.
           </Typography>
           <Box sx={{ display: "flex", gap: 2, justifyContent: "flex-end" }}>
-            <Button 
-              startIcon={<X size={18} />}
+            <Button
               onClick={() => setDeleteDialogOpen(false)}
+              sx={{
+                textTransform: "none",
+                borderRadius: "12px",
+                px: 3,
+                py: 1,
+                fontSize: 15,
+                fontWeight: 600,
+                color: "#333",
+                border: "1px solid #ddd",
+                "&:hover": { backgroundColor: "#f5f5f5" },
+              }}
             >
               Cancel
             </Button>
             <Button
               variant="contained"
-              color="error"
-              startIcon={<Trash2 size={18} />}
               onClick={handleConfirmDelete}
+              sx={{
+                textTransform: "none",
+                borderRadius: "12px",
+                px: 3,
+                py: 1,
+                fontSize: 15,
+                fontWeight: 600,
+                backgroundColor: "#b91c1c",
+                boxShadow: "none",
+                "&:hover": { backgroundColor: "#991b1b", boxShadow: "none" },
+              }}
             >
-              Delete
+              Delete Recipe
             </Button>
           </Box>
         </Box>

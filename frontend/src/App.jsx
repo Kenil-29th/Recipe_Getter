@@ -32,7 +32,7 @@ function App() {
       <Routes>
         {/* PUBLIC ROUTES */}
         <Route path="/" element={<UserDashboard />} />
-        <Route path="/recipe/:id" element={<RecipeDetail />} />
+        <Route path="/recipe/:slug" element={<RecipeDetail />} />
         <Route path="/search" element={<RecipeSearch />} />
 
         {/* AUTH ROUTES */}
@@ -57,7 +57,7 @@ function App() {
           }
         />
         <Route
-          path="/chef/recipes/:id/edit"
+          path="/chef/recipes/:slug/edit"
           element={
             <ProtectedRoute requiredRole="chef">
               <AddRecipePage />

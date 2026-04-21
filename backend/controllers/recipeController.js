@@ -80,7 +80,12 @@ const suggestRecipes = async (req, res, next) => {//controller to suggest recipe
 
 const getRecipeById = async (req, res, next) => {//controller to fetch single recipe
   try {
-    const recipe = await Recipe.findById(req.params.id).populate(//find recipe by ID and populate chef details
+    const { id } = req.params;
+    // Support both slug and ObjectId lookups
+    const query = id.match(/^[0-9a-fA-F]{24}$/)
+      ? { _id: id }
+      : { slug: id };
+    const recipe = await Recipe.findOne(query).populate(
       'chefId',
       'name email bio avatar'
     );

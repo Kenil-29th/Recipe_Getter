@@ -4,7 +4,7 @@ const { login, register, getMe, updateProfile } = require('../controllers/authCo
 const { protect } = require('../middleware/auth');
 
 router.post('/login', login);
-router.post('/signup', register);
+router.post('/register', register);
 router.get('/me', protect, getMe);
 router.put('/update-profile', protect, updateProfile);
 
