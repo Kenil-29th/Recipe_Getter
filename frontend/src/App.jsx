@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import PublicLayout from "./layouts/PublicLayout";
 
 const theme = createTheme({
   typography: {
@@ -14,6 +15,8 @@ import Signup from "./pages/auth/Signup";
 import UserDashboard from "./pages/user/UserDashboard";
 import RecipeSearch from "./pages/user/RecipeSearch";
 import RecipeDetail from "./pages/user/RecipeDetail";
+import ContactUs from "./pages/user/ContactUs";
+import About from "./pages/user/About";
 
 // Chef pages
 import ChefDashboard from "./pages/chef/ChefDashboard";
@@ -30,10 +33,14 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <Routes>
-        {/* PUBLIC ROUTES */}
-        <Route path="/" element={<UserDashboard />} />
-        <Route path="/recipe/:slug" element={<RecipeDetail />} />
-        <Route path="/search" element={<RecipeSearch />} />
+        {/* PUBLIC ROUTES — shared Header via layout */}
+        <Route element={<PublicLayout />}>
+          <Route path="/" element={<UserDashboard />} />
+          <Route path="/recipe/:slug" element={<RecipeDetail />} />
+          <Route path="/search" element={<RecipeSearch />} />
+          <Route path="/contact" element={<ContactUs />} />
+          <Route path="/about" element={<About />} />
+        </Route>
 
         {/* AUTH ROUTES */}
         <Route path="/auth/login" element={<Login />} />

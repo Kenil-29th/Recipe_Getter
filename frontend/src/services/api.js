@@ -75,4 +75,9 @@ export const adminAPI = {
   toggleChefStatus: (id) => api.patch(`/admin/chefs/${id}/toggle-status`),
 };
 
+// ━━━ CONTACT ENDPOINT ━━━
+export const contactAPI = {
+  sendMessage: (data) => api.post("/contact", data),
+};
+
 export default api;

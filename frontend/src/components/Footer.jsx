@@ -8,13 +8,22 @@ import {
   Link,
   IconButton,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import GitHubIcon from "@mui/icons-material/GitHub";
 
+const footerLinks = [
+  { label: "About", path: "/about" },
+  { label: "Careers", path: "#" },
+  { label: "Contact", path: "/contact" },
+  { label: "Partners", path: "#" },
+];
+
 export default function Footer() {
+  const navigate = useNavigate();
   return (
     <Box
       sx={{
@@ -89,10 +98,11 @@ export default function Footer() {
                 Company
               </Typography>
 
-              {["About", "Careers", "Contact", "Partners"].map((link) => (
+              {footerLinks.map((link) => (
                 <Typography
-                  key={link}
+                  key={link.label}
                   variant="body2"
+                  onClick={() => link.path !== "#" && navigate(link.path)}
                   sx={{
                     mb: 1,
                     cursor: "pointer",
@@ -100,7 +110,7 @@ export default function Footer() {
                     "&:hover": { color: "#3a5f23", fontWeight: 500 },
                   }}
                 >
-                  {link}
+                  {link.label}
                 </Typography>
               ))}
             </Box>

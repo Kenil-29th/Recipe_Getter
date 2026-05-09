@@ -10,10 +10,8 @@ import {
   Alert,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import SearchBar from '../../components/SearchBar';
-import WordCloud3D from '../../components/WordCloud3D';
 import { recipeAPI } from '../../services/api';
 
 const UserDashboard = () => {
@@ -185,26 +183,9 @@ const UserDashboard = () => {
   );
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', position: 'relative', overflow: 'hidden' }}>
-      {/* 3D Word Cloud Background */}
-      <WordCloud3D />
-      
-      {/* Gradient overlay for better readability */}
-      <Box sx={{ 
-        position: 'fixed', 
-        top: 0, 
-        left: 0, 
-        width: '100%', 
-        height: '100%', 
-        background: 'linear-gradient(135deg, rgba(10, 10, 21, 0.85) 0%, rgba(58, 95, 35, 0.75) 50%, rgba(10, 10, 21, 0.85) 100%)',
-        zIndex: 1,
-        pointerEvents: 'none'
-      }} />
-      
-      {/* Content with higher z-index */}
-      <Box sx={{ position: 'relative', zIndex: 3 }}>
-        <Header />
-        
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', position: 'relative' }}>
+      {/* Content */}
+      <Box>
         <SearchBar />
 
         <Container maxWidth="lg" sx={{ py: 5, flex: 1 }}>

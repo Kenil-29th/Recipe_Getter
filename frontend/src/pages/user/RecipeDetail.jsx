@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback } from "react";
-import WordCloud3D from "../../components/WordCloud3D";
 import {
   Box,
   Typography,
@@ -12,7 +11,6 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
 import TimerIcon from "@mui/icons-material/Timer";
 import { useParams } from "react-router-dom";
-import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { recipeAPI } from "../../services/api";
 
@@ -41,7 +39,6 @@ export default function RecipeDetail() {
   if (loading) {
     return (
       <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-        <Header />
         <Box sx={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center" }}>
           <CircularProgress />
         </Box>
@@ -53,7 +50,6 @@ export default function RecipeDetail() {
   if (error || !recipe) {
     return (
       <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-        <Header />
         <Box sx={{ flex: 1, p: 3, display: "flex", justifyContent: "center", alignItems: "center" }}>
           <Alert severity="error">{error || "Recipe not found"}</Alert>
         </Box>
@@ -63,25 +59,9 @@ export default function RecipeDetail() {
   }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', position: 'relative', overflow: 'hidden' }}>
-      {/* 3D Word Cloud Background */}
-      <WordCloud3D />
-      
-      {/* Gradient overlay for better readability */}
-      <Box sx={{ 
-        position: 'fixed', 
-        top: 0, 
-        left: 0, 
-        width: '100%', 
-        height: '100%', 
-        background: 'linear-gradient(135deg, rgba(10, 10, 21, 0.85) 0%, rgba(58, 95, 35, 0.75) 50%, rgba(10, 10, 21, 0.85) 100%)',
-        zIndex: 1,
-        pointerEvents: 'none'
-      }} />
-      
-      {/* Content with higher z-index */}
-      <Box sx={{ position: 'relative', zIndex: 3 }}>
-        <Header />
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', position: 'relative' }}>
+      {/* Content */}
+      <Box>
         
         <Box sx={{ flex: 1, display: "flex", justifyContent: "center", p: { xs: 2, sm: 3 } }}>
           <Box

@@ -10,6 +10,7 @@ const authRoutes = require('./routes/authRoutes');
 const chefRoutes = require('./routes/chefRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const recipeRoutes = require('./routes/recipeRoutes');
+const contactRoutes = require('./routes/contactRoutes');
 
 // Connect to MongoDB
 connectDB();
@@ -53,6 +54,7 @@ app.use('/api/auth', authRoutes);// all auth routes starts with api/routes
 app.use('/api/chef', chefRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/recipes', recipeRoutes);
+app.use('/api/contact', contactRoutes);
 
 // ─── Error Handling ───────────────────────────────────────────────────────────
 app.use(notFound);//handle unknown routes

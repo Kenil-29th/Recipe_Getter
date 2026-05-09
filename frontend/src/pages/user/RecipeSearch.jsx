@@ -20,7 +20,6 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { recipeAPI } from '../../services/api';
 
@@ -173,7 +172,6 @@ const RecipeSearch = () => {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: '#f5f5f5' }}>
-      <Header />
 
       <Container maxWidth="lg" sx={{ py: 4, flex: 1 }}>
         {/* SEARCH HEADER */}
